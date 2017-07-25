@@ -21,24 +21,22 @@ public class MainActivity extends AppCompatActivity {
 
         clipboard = (ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE);
 
-
-        Log.d("QS", String.valueOf(clipboard.getPrimaryClip()));
         updateClip("START", "2");
 
         final Button button = (Button) findViewById(R.id.updateClip);
         button.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                EditText clipLabel = (EditText) findViewById(R.id.label);
-                EditText clipText = (EditText) findViewById(R.id.text);
 
-                //if(clipLabel != null && clipText != null) {
+                EditText clipLabel = (EditText) findViewById(R.id.label);
+                EditText clipText = (EditText) findViewById(R.id.clip);
+
+                if(clipLabel != null && clipText != null) {
                     try {
-                        Log.d(clipLabel.getText().toString(), clipText.getText().toString());
                         updateClip(clipLabel.getText().toString(), clipText.getText().toString());
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
-                //}
+                }
             }
         });
     }

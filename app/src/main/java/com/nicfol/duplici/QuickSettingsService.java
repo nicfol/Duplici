@@ -1,7 +1,6 @@
 package com.nicfol.duplici;
 
 import android.annotation.TargetApi;
-import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.content.Context;
 import android.os.Build;
@@ -27,8 +26,8 @@ public class QuickSettingsService extends TileService {
 
         ClipboardManager clipboard = (ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE);
 
-        Log.d("QS", "Updated primary clip: " + String.valueOf(clipboard.getPrimaryClipDescription().getLabel()));
-        Log.d("QS", "Updated primary clip: " + String.valueOf(clipboard.getPrimaryClip().getItemAt(0).getText()));
+        Log.d("QS", String.valueOf(clipboard.getPrimaryClipDescription().getLabel()));
+        Log.d("QS", String.valueOf(clipboard.getPrimaryClip().getItemAt(0).getText()));
     }
 
     @Override
