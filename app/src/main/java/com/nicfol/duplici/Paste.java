@@ -7,19 +7,19 @@ package com.nicfol.duplici;
 public class Paste {
 
     private String label;
-    private String clip;
+    private String text;
 
-    public Paste(String label, String clip) {
+    public Paste(String label, String text) {
         this.label = label;
-        this.clip = clip;
+        this.text = text;
     }
 
-    public String getClip() {
-        return clip;
+    public String getText() {
+        return text;
     }
 
     public void setClip(String clip) {
-        this.clip = clip;
+        this.text = clip;
     }
 
     public String getLabel() {
