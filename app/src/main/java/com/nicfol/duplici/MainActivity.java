@@ -3,8 +3,8 @@ package com.nicfol.duplici;
 import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.content.Context;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -23,8 +23,8 @@ public class MainActivity extends AppCompatActivity {
 
         updateClip("START", "2");
 
-        final Button button = (Button) findViewById(R.id.updateClip);
-        button.setOnClickListener(new View.OnClickListener() {
+        final Button updateClipboard = (Button) findViewById(R.id.updateClip);
+        updateClipboard.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
 
                 EditText clipLabel = (EditText) findViewById(R.id.label);
@@ -32,7 +32,11 @@ public class MainActivity extends AppCompatActivity {
 
                 if(clipLabel != null && clipText != null) {
                     try {
-                        updateClip(clipLabel.getText().toString(), clipText.getText().toString());
+                        String savedLabel = clipLabel.getText().toString();
+                        String savedText = clipText.getText().toString();
+                        updateClip(savedLabel, savedText);
+
+
                     } catch (Exception e) {
                         e.printStackTrace();
                     }

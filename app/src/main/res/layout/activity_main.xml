@@ -23,7 +23,7 @@
                 android:layout_height="wrap_content"
                 android:ems="10"
                 android:hint="Label"
-                android:text="Label"
+                android:text="My Label"
                 android:textAlignment="center"
                 tools:layout_editor_absoluteX="16dp"
                 tools:layout_editor_absoluteY="16dp" />
@@ -39,7 +39,7 @@
                 android:layout_height="wrap_content"
                 android:ems="10"
                 android:hint="Clip to save"
-                android:text="Clip to save"
+                android:text="My Clip to save"
                 android:textAlignment="center"
                 tools:layout_editor_absoluteX="16dp"
                 tools:layout_editor_absoluteY="64dp" />
@@ -53,9 +53,22 @@
                 android:id="@+id/updateClip"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Button"
+                android:text="update clipboard"
                 tools:layout_editor_absoluteX="16dp"
                 tools:layout_editor_absoluteY="112dp" />
+        </TableRow>
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <Button
+                android:id="@+id/getPrefs"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="get prefs"
+                tools:layout_editor_absoluteX="16dp"
+                tools:layout_editor_absoluteY="160dp" />
         </TableRow>
     </TableLayout>
 
