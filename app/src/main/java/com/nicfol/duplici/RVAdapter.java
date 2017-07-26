@@ -38,15 +38,14 @@ public class RVAdapter extends RecyclerView.Adapter<RVAdapter.ViewHolder> {
     public RVAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View itemView = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.card_pastes, parent, false);
-
         return new ViewHolder(itemView);
     }
 
     @Override
     public void onBindViewHolder(RVAdapter.ViewHolder holder, int position) {
-        Paste paste = pasteList.get(position);
-        holder.cLabel.setText(paste.getLabel());
-        holder.cText.setText(paste.getText());
+        holder.setIsRecyclable(false);
+        holder.cLabel.setText(pasteList.get(position).getLabel());
+        holder.cText.setText(pasteList.get(position).getText());
         holder.cIcon.setImageResource(R.drawable.moneybag);
     }
 
@@ -57,6 +56,9 @@ public class RVAdapter extends RecyclerView.Adapter<RVAdapter.ViewHolder> {
 
     @Override
     public int getItemCount() {
-        return 0;
+        //DBHelper db = new DBHelper(mContext);
+        //return db.getNoOfRows();
+        return pasteList.size();
+        //return -1;
     }
 }

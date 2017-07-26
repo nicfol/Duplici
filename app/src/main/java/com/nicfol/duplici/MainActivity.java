@@ -3,21 +3,25 @@ package com.nicfol.duplici;
 import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.content.Context;
-import android.database.Cursor;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
-import android.widget.Button;
-import android.widget.EditText;
+import android.widget.TextView;
 
 import com.facebook.stetho.Stetho;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
 
     private ClipboardManager clipboard;
 
     DBHelper db = new DBHelper(this);
+    private List<Paste> pasteList = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -32,10 +36,41 @@ public class MainActivity extends AppCompatActivity {
 
         clipboard = (ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE);
 
-        Log.d("Check DB insertion", String.valueOf(db.insertPaste("savedLabel233", "sa3vedText2", "ic23o")));
+
+        pasteList = db.getPasteList();
+
+
+
         updateClip("Initial clip update: ", "Success");
 
 
+
+        RecyclerView rv = (RecyclerView)findViewById(R.id.rv);
+        RVAdapter adapter = new RVAdapter(this, pasteList);
+        LinearLayoutManager llm = new LinearLayoutManager(this);
+
+        TextView noData = (TextView)findViewById(R.id.noData);
+
+        for(int i = 1; i < adapter.getItemCount(); i++) {
+            Log.d("Paste: ", pasteList.get(i).getLabel());
+        }
+
+
+        if(pasteList.isEmpty()) {
+            noData.setVisibility(View.VISIBLE);
+            rv.setVisibility(View.GONE);
+        } else {
+            noData.setVisibility(View.GONE);
+            rv.setVisibility(View.VISIBLE);
+        }
+
+        rv.setLayoutManager(llm);
+        rv.hasFixedSize();
+        rv.setAdapter(adapter);
+
+
+
+/*
         final Button updateClipboard = (Button) findViewById(R.id.updateClip);
         updateClipboard.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
@@ -76,8 +111,9 @@ public class MainActivity extends AppCompatActivity {
 
             }
         });
-
+*/
     }
+
 
     private void updateClip(String label, String text) {
         ClipData clip = ClipData.newPlainText(label, text);

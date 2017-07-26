@@ -9,6 +9,9 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class DBHelper extends SQLiteOpenHelper {
 
     static final String DATABASE_NAME = "duplici_pastes.db";
@@ -76,13 +79,35 @@ public class DBHelper extends SQLiteOpenHelper {
     }
 
     public Cursor getPaste(int id) {
-        Log.d("getPaste", "Start");
         SQLiteDatabase db = this.getReadableDatabase();
         Cursor res = db.rawQuery( "SELECT * FROM " + PASTE_TABLE_NAME + " WHERE " + PASTE_COLUMN_ID + "=?",
                 new String[] {Integer.toString(id)});
-        Log.d("getPaste", "End");
         return res;
     }
+
+
+    public List<Paste> getPasteList() {
+        List<Paste> pasteList = new ArrayList<>();
+
+        SQLiteDatabase db = this.getReadableDatabase();
+        int rows = getNoOfRows();
+        for(int i = 1; i < rows; i++) {
+            Cursor res = getPaste(i);
+
+            res.moveToFirst();
+            String label = res.getString(res.getColumnIndex(DBHelper.PASTE_COLUMN_LABEL));
+            String text = res.getString(res.getColumnIndex(DBHelper.PASTE_COLUMN_TEXT));
+
+            Paste tempPaste = new Paste(label, text);
+            pasteList.add(tempPaste);
+            res.close();
+        }
+
+        db.close();
+
+        return pasteList;
+    }
+
 
     public Cursor getAllPastes() {
         SQLiteDatabase db = this.getReadableDatabase();
@@ -96,9 +121,13 @@ public class DBHelper extends SQLiteOpenHelper {
                 new String[] {Integer.toString(id)});
     }
 
-    public int noOfRows() {
+    public int getNoOfRows() {
         SQLiteDatabase db = this.getReadableDatabase();
-        return (int) DatabaseUtils.queryNumEntries(db, PASTE_TABLE_NAME);
+        try {
+            //Log.d("getNoRows", String.valueOf(DatabaseUtils.queryNumEntries(db, PASTE_TABLE_NAME)));
+            return (int) DatabaseUtils.queryNumEntries(db, PASTE_TABLE_NAME);
+        } finally {
+            db.close();
+        }
     }
-
 }

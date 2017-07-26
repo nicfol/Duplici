@@ -4,84 +4,24 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.nicfol.duplici.MainActivity">
+    tools:context="com.nicfol.duplici.MainActivity"
+    android:paddingTop="16dp">
 
-    <TableLayout
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        tools:layout_editor_absoluteY="8dp">
+    <android.support.v7.widget.RecyclerView
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:id="@+id/rv"
+        android:textAlignment="center"
+        tools:layout_editor_absoluteY="0dp"
+        tools:layout_editor_absoluteX="8dp" />
 
-        <TableRow
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
-
-            <EditText
-                android:id="@+id/label"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:ems="10"
-                android:hint="Label"
-                android:text="My Label"
-                android:textAlignment="center"
-                tools:layout_editor_absoluteX="16dp"
-                tools:layout_editor_absoluteY="16dp" />
-        </TableRow>
-
-        <TableRow
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
-
-            <EditText
-                android:id="@+id/clip"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:ems="10"
-                android:hint="Clip to save"
-                android:text="My Clip to save"
-                android:textAlignment="center"
-                tools:layout_editor_absoluteX="16dp"
-                tools:layout_editor_absoluteY="64dp" />
-        </TableRow>
-
-        <TableRow
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
-
-            <Button
-                android:id="@+id/updateClip"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="update clipboard"
-                tools:layout_editor_absoluteX="16dp"
-                tools:layout_editor_absoluteY="112dp" />
-        </TableRow>
-
-        <TableRow
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
-
-            <Button
-                android:id="@+id/getPrefs"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="get prefs"
-                tools:layout_editor_absoluteX="16dp"
-                tools:layout_editor_absoluteY="160dp" />
-        </TableRow>
-
-        <TableRow
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
-
-            <android.support.v7.widget.RecyclerView
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:id="@+id/rv"
-                />
-
-        </TableRow>
-    </TableLayout>
+    <TextView
+        android:id="@+id/noData"
+        android:layout_width="420dp"
+        android:layout_height="wrap_content"
+        android:text="No Pastes Available"
+        android:textAlignment="center"
+        tools:layout_editor_absoluteX="8dp"
+        tools:layout_editor_absoluteY="257dp" />
 
 </android.support.constraint.ConstraintLayout>
