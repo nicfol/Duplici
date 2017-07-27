@@ -46,7 +46,7 @@ public class RVAdapter extends RecyclerView.Adapter<RVAdapter.ViewHolder> {
         holder.setIsRecyclable(false);
         holder.cLabel.setText(pasteList.get(position).getLabel());
         holder.cText.setText(pasteList.get(position).getText());
-        holder.cIcon.setImageResource(R.drawable.moneybag);
+        holder.cIcon.setImageResource(R.drawable.moneybag); //TODO Assign DB value to imageview
     }
 
     @Override
@@ -56,9 +56,6 @@ public class RVAdapter extends RecyclerView.Adapter<RVAdapter.ViewHolder> {
 
     @Override
     public int getItemCount() {
-        //DBHelper db = new DBHelper(mContext);
-        //return db.getNoOfRows();
         return pasteList.size();
-        //return -1;
     }
 }

@@ -34,14 +34,14 @@
                 android:layout_toRightOf="@+id/pasteIcon"
                 android:layout_alignParentTop="true"
                 android:textSize="30sp"
-                android:text="aefawefawe"
+                android:text="label"
                 />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:id="@+id/pasteText"
-                android:text="awdzwdawd"
+                android:text="paste"
                 android:layout_toRightOf="@+id/pasteIcon"
                 android:layout_below="@+id/pasteLabel"
                 />

@@ -7,7 +7,6 @@ import android.database.Cursor;
 import android.database.DatabaseUtils;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
-import android.util.Log;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -44,7 +43,7 @@ public class DBHelper extends SQLiteOpenHelper {
         }
     }
 
-    public boolean insertPaste(String cLabel, String cText, String cIcon) {
+    public boolean insertPaste(String cLabel, String cText, int cIcon) {
         try {
             SQLiteDatabase db = getWritableDatabase();
             ContentValues contentValues = new ContentValues();
@@ -61,7 +60,7 @@ public class DBHelper extends SQLiteOpenHelper {
         }
     }
 
-    public boolean updatePaste(Integer id, String cLabel, String cText, String cIcon) {
+    public boolean updatePaste(Integer id, String cLabel, String cText, int cIcon) {
         try {
             SQLiteDatabase db = getWritableDatabase();
             ContentValues contentValues = new ContentValues();
@@ -86,21 +85,29 @@ public class DBHelper extends SQLiteOpenHelper {
     }
 
 
-    public List<Paste> getPasteList() {
+    public List<Paste> getListOfPastes() {
         List<Paste> pasteList = new ArrayList<>();
-
         SQLiteDatabase db = this.getReadableDatabase();
+
         int rows = getNoOfRows();
         for(int i = 1; i < rows; i++) {
-            Cursor res = getPaste(i);
 
-            res.moveToFirst();
-            String label = res.getString(res.getColumnIndex(DBHelper.PASTE_COLUMN_LABEL));
-            String text = res.getString(res.getColumnIndex(DBHelper.PASTE_COLUMN_TEXT));
+            try {
+                Cursor res = getPaste(i);
 
-            Paste tempPaste = new Paste(label, text);
-            pasteList.add(tempPaste);
-            res.close();
+                if(res != null) {
+                    res.moveToFirst();
+                    String label = res.getString(res.getColumnIndex(DBHelper.PASTE_COLUMN_LABEL));
+                    String text = res.getString(res.getColumnIndex(DBHelper.PASTE_COLUMN_TEXT));
+                    int icon = res.getInt(res.getColumnIndex(DBHelper.PASTE_COLUMN_ICON));
+
+                    Paste tempPaste = new Paste(label, text, icon);
+                    pasteList.add(tempPaste);
+                    res.close();
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         }
 
         db.close();
@@ -124,7 +131,6 @@ public class DBHelper extends SQLiteOpenHelper {
     public int getNoOfRows() {
         SQLiteDatabase db = this.getReadableDatabase();
         try {
-            //Log.d("getNoRows", String.valueOf(DatabaseUtils.queryNumEntries(db, PASTE_TABLE_NAME)));
             return (int) DatabaseUtils.queryNumEntries(db, PASTE_TABLE_NAME);
         } finally {
             db.close();
