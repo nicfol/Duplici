@@ -1,4 +1,7 @@
 <resources>
     <string name="app_name">Duplici</string>
     <string name="tile_name">DupliciTile</string>
+    <string name="modifyPasteTitle">Modify Paste</string>
+    <string name="modifyPasteAccept">Accept</string>
+    <string name="modifyPasteDiscard">Discard</string>
 </resources>

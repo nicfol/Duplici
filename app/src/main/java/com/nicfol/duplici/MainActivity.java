@@ -11,6 +11,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 
+import com.afollestad.materialdialogs.MaterialDialog;
 import com.facebook.stetho.Stetho;
 
 import java.util.ArrayList;
@@ -45,23 +46,26 @@ public class MainActivity extends AppCompatActivity {
         }
 
         //Hide RV if there's nothing to show
-        if(pasteList.isEmpty()) {
-            TextView noData = (TextView)findViewById(R.id.noData);
-            noData.setVisibility(View.VISIBLE);
-            rv.setVisibility(View.GONE);
-        } else {
-            TextView noData = (TextView)findViewById(R.id.noData);
-            noData.setVisibility(View.GONE);
-            rv.setVisibility(View.VISIBLE);
-        }
+        updateUIifEmptyList(rv);
 
         rv.setLayoutManager(llm);
         rv.setAdapter(adapter);
+
+        final MaterialDialog.Builder dialog = new MaterialDialog.Builder(this)
+                .title(R.string.modifyPasteTitle)
+                .content("dothislater")//TODO add content to dialog
+                .positiveText(R.string.modifyPasteAccept)
+                .negativeText(R.string.modifyPasteDiscard);
 
         //Fab
         final FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
+
+               dialog.show();
+
+
+
 
                 deletePaste(rv, adapter, 0);
 
@@ -99,14 +103,28 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void deletePaste(RecyclerView rv, RVAdapter adapter, int indexToDelete) {
-        pasteList.remove(indexToDelete);
-        rv.removeViewAt(indexToDelete);
-        adapter.notifyItemChanged(indexToDelete);
-        adapter.notifyItemRangeChanged(indexToDelete, pasteList.size());
+        if(!pasteList.isEmpty()) {
+            pasteList.remove(indexToDelete);
+            rv.removeViewAt(indexToDelete);
+            adapter.notifyItemChanged(indexToDelete);
+            adapter.notifyItemRangeChanged(indexToDelete, pasteList.size());
 
-        adapter.notifyDataSetChanged();
+            adapter.notifyDataSetChanged();
+            updateUIifEmptyList(rv);
+        }
     }
 
+    private void updateUIifEmptyList(RecyclerView rv) {
+        if(pasteList.isEmpty()) {
+            TextView noData = (TextView)findViewById(R.id.noData);
+            noData.setVisibility(View.VISIBLE);
+            rv.setVisibility(View.GONE);
+        } else {
+            TextView noData = (TextView)findViewById(R.id.noData);
+            noData.setVisibility(View.GONE);
+            rv.setVisibility(View.VISIBLE);
+        }
+    }
 
     private void updateClip(String label, String text) {
         ClipData clip = ClipData.newPlainText(label, text);
