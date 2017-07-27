@@ -39,10 +39,7 @@ public class MainActivity extends AppCompatActivity {
 
         pasteList = db.getPasteList();
 
-
-
         updateClip("Initial clip update: ", "Success");
-
 
 
         RecyclerView rv = (RecyclerView)findViewById(R.id.rv);
@@ -119,5 +116,9 @@ public class MainActivity extends AppCompatActivity {
         ClipData clip = ClipData.newPlainText(label, text);
         clipboard.setPrimaryClip(clip);
         Log.d("Updated Clip:", String.valueOf(clipboard.getPrimaryClipDescription().getLabel()) + " : " + String.valueOf(clipboard.getPrimaryClip().getItemAt(0).getText()));
+    }
+
+    public void fabClick(View view) {
+
     }
 }
