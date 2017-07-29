@@ -31,7 +31,7 @@ public class MainActivity extends AppCompatActivity {
                         .build());
 
         pasteListSingleton.init(this);
-        pasteList = pasteListSingleton.getPasteList();
+        updatePasteList();
 
         final RecyclerView rv = (RecyclerView)findViewById(R.id.rv);
         final RVAdapter adapter = new RVAdapter(this, pasteList);
@@ -57,12 +57,10 @@ public class MainActivity extends AppCompatActivity {
                 //pasteListSingleton.deletePaste(0);
             }
         });
-
     }
 
-
     public void deletePasteInRV(RecyclerView rv, RVAdapter adapter, int indexToDelete) {
-        pasteList = pasteListSingleton.getPasteList();
+        updatePasteList();
         if(!pasteList.isEmpty()) {
             rv.removeViewAt(indexToDelete);
             adapter.notifyItemChanged(indexToDelete);
@@ -74,7 +72,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void updateUIifEmptyList(RecyclerView rv) {
-        pasteList = pasteListSingleton.getPasteList();
+        updatePasteList();
         if(pasteList.isEmpty()) {
             TextView noData = (TextView)findViewById(R.id.noData);
             noData.setVisibility(View.VISIBLE);
@@ -86,4 +84,7 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    public void updatePasteList() {
+        pasteList = pasteListSingleton.getPasteList();
+    }
 }
