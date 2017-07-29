@@ -53,13 +53,36 @@ public class MainActivity extends AppCompatActivity {
         final FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                //deletePasteInRV(rv, adapter, 0);
-                //pasteListSingleton.deletePaste(0);
+                int del = 3; //TODO Not hardcode this
+                Paste pa = (Paste) pasteListSingleton.getPasteList().get(del);
+
+                for(int i = 0; i < pasteListSingleton.getLastInsertId(); i ++) {
+                    Log.d("Counter: ", String.valueOf(i));
+                    if(pasteList.get(del) != null) {
+                        if ( pasteList.get(i).getDbID() == pa.getDbID()) {
+                            Log.d(String.valueOf(i), String.valueOf(pa.getDbID()));
+                            pasteListSingleton.deletePaste(pa.getDbID());
+
+                            pasteList.remove(del);
+                            updateRV(rv, adapter, del);
+                            break;
+                        }
+                    }
+                }
+                updateRV(rv, adapter);
             }
         });
     }
 
-    public void deletePasteInRV(RecyclerView rv, RVAdapter adapter, int indexToDelete) {
+    public void updateRV(RecyclerView rv, RVAdapter adapter) {
+        adapter.notifyItemChanged(pasteListSingleton.getPasteList().size());
+        adapter.notifyItemRangeChanged(pasteListSingleton.getPasteList().size(), pasteListSingleton.getPasteList().size());
+
+        adapter.notifyDataSetChanged();
+        updateUIifEmptyList(rv);
+    }
+
+    public void updateRV(RecyclerView rv, RVAdapter adapter, int indexToDelete) {
         updatePasteList();
         if(!pasteList.isEmpty()) {
             rv.removeViewAt(indexToDelete);

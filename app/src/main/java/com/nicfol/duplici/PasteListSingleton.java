@@ -31,11 +31,12 @@ class PasteListSingleton {
     }
 
     protected static void insertPaste(String cLabel, String cText, int cIcon) {
+        //Add new paste to DB
         db = new DBHelper(appContext);
         db.insertPaste(cLabel, cText, cIcon);
 
-        int dbID = db.getLastInsertID();
-        Paste tempPaste = new Paste(dbID, cLabel, cText, cIcon);
+        //Add new paste to memory list
+        Paste tempPaste = new Paste(db.getLastInsertID()+1, cLabel, cText, cIcon);
         pasteList.add(tempPaste);
 
         db.close();
@@ -55,6 +56,11 @@ class PasteListSingleton {
 
     protected List getPasteList() {
         return pasteList;
+    }
+
+    protected int getLastInsertId() {
+        db = new DBHelper(appContext);
+        return db.getLastInsertID();
     }
 
 }

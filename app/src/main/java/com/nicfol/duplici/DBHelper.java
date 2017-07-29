@@ -121,10 +121,10 @@ public class DBHelper extends SQLiteOpenHelper {
         return res;
     }
 
-    public Integer deletePaste(Integer id) {
-        SQLiteDatabase db = this.getReadableDatabase();
-        return db.delete(PASTE_TABLE_NAME, PASTE_COLUMN_ID + " =? ",
-                new String[] {Integer.toString(id)});
+    public void deletePaste(Integer id) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        db.delete(PASTE_TABLE_NAME, PASTE_COLUMN_ID + " = ?",
+                new String[]{Long.toString(id)} );
     }
 
     public int getNoOfRows() {
@@ -147,6 +147,7 @@ public class DBHelper extends SQLiteOpenHelper {
         if(res != null && res.moveToLast()) {
             insertID = res.getInt(0);
         }
+
         return insertID;
     }
 }

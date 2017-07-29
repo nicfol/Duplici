@@ -24,7 +24,12 @@ public class RVAdapter extends RecyclerView.Adapter<RVAdapter.ViewHolder> {
             super(itemView);
 
             cLabel = (TextView) itemView.findViewById(R.id.pasteLabel);
+
+
             cText = (TextView) itemView.findViewById(R.id.pasteText);
+            //if(cText.length() > 40) { cText.setTextSize(17); } //TODO Scale text based on length?
+
+
             cIcon = (ImageView) itemView.findViewById(R.id.pasteIcon);
         }
     }
@@ -44,8 +49,8 @@ public class RVAdapter extends RecyclerView.Adapter<RVAdapter.ViewHolder> {
     @Override
     public void onBindViewHolder(RVAdapter.ViewHolder holder, int position) {
         holder.setIsRecyclable(false);
-        holder.cLabel.setText(position + " " + pasteList.get(position).getLabel());
-        holder.cText.setText(pasteList.get(position).getText());
+        holder.cLabel.setText(pasteList.get(position).getDbID() + " " + pasteList.get(position).getLabel());
+        holder.cText.setText(position + pasteList.get(position).getText());
         holder.cIcon.setImageResource(R.drawable.moneybag); //TODO Assign DB value to imageview
     }
 
