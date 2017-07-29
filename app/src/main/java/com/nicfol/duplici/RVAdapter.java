@@ -44,7 +44,7 @@ public class RVAdapter extends RecyclerView.Adapter<RVAdapter.ViewHolder> {
     @Override
     public void onBindViewHolder(RVAdapter.ViewHolder holder, int position) {
         holder.setIsRecyclable(false);
-        holder.cLabel.setText(pasteList.get(position).getLabel());
+        holder.cLabel.setText(position + " " + pasteList.get(position).getLabel());
         holder.cText.setText(pasteList.get(position).getText());
         holder.cIcon.setImageResource(R.drawable.moneybag); //TODO Assign DB value to imageview
     }

@@ -27,9 +27,8 @@ class PasteListSingleton {
 
 
     protected void init(Context context) {
-        appContext = context;
-
         if(context != null){
+            appContext = context;
             db = new DBHelper(appContext);
             pasteList = db.getListOfPastes();
         }
@@ -43,6 +42,8 @@ class PasteListSingleton {
         db.insertPaste(cLabel, cText, cIcon);
         db.close();
     }
+
+
 
     protected List getPasteList() {
         return pasteList;

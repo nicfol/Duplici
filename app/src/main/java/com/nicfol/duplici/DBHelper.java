@@ -7,6 +7,7 @@ import android.database.Cursor;
 import android.database.DatabaseUtils;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.util.Log;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -89,14 +90,16 @@ public class DBHelper extends SQLiteOpenHelper {
         List<Paste> pasteList = new ArrayList<>();
         SQLiteDatabase db = this.getReadableDatabase();
 
-        int rows = getNoOfRows();
-        for(int i = 1; i < rows; i++) {
+        Cursor RowCursor = getAllPastes();
+
+        int rows = RowCursor.getCount();
+        int lastRow = getLastInsertID() - rows;
+        for(int i = 1; i < rows + lastRow + 1; i++) {
 
             try {
                 Cursor res = getPaste(i);
 
-                if(res != null) {
-                    res.moveToFirst();
+                if(res != null &&  res.moveToFirst()) {
                     String label = res.getString(res.getColumnIndex(DBHelper.PASTE_COLUMN_LABEL));
                     String text = res.getString(res.getColumnIndex(DBHelper.PASTE_COLUMN_TEXT));
                     int icon = res.getInt(res.getColumnIndex(DBHelper.PASTE_COLUMN_ICON));
@@ -111,7 +114,6 @@ public class DBHelper extends SQLiteOpenHelper {
         }
 
         db.close();
-
         return pasteList;
     }
 
@@ -132,8 +134,22 @@ public class DBHelper extends SQLiteOpenHelper {
         SQLiteDatabase db = this.getReadableDatabase();
         try {
             return (int) DatabaseUtils.queryNumEntries(db, PASTE_TABLE_NAME);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return -1;
         } finally {
             db.close();
         }
+    }
+
+    public int getLastInsertID() {
+        //TODO Catch some edge cases here
+        int insertID = -1;
+        Cursor res = getAllPastes();
+        if(res != null && res.moveToLast()) {
+            insertID = res.getInt(0);
+        }
+
+        return insertID;
     }
 }
