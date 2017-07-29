@@ -1,6 +1,5 @@
 package com.nicfol.duplici;
 
-import android.app.Dialog;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
@@ -8,8 +7,6 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
-import android.widget.Button;
-import android.widget.ImageButton;
 import android.widget.TextView;
 
 import com.facebook.stetho.Stetho;
@@ -18,8 +15,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
-
-    DBHelper db = new DBHelper(this);
     private List<Paste> pasteList = new ArrayList<>();
     PasteListSingleton pasteListSingleton = PasteListSingleton.getInstance();
 
@@ -35,9 +30,6 @@ public class MainActivity extends AppCompatActivity {
                         .enableWebKitInspector(Stetho.defaultInspectorModulesProvider(this))
                         .build());
 
-        //Save database to list of pastes
-        //pasteList = db.getListOfPastes();
-
         pasteListSingleton.init(this);
         pasteList = pasteListSingleton.getPasteList();
 
@@ -52,6 +44,7 @@ public class MainActivity extends AppCompatActivity {
 
         //Hide RV if there's nothing to show
         updateUIifEmptyList(rv);
+
         //Assign layout manager to the RV Adapter
         rv.setLayoutManager(llm);
         rv.setAdapter(adapter);
@@ -60,10 +53,8 @@ public class MainActivity extends AppCompatActivity {
         final FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-
-            //dialog.show();
-
-                deletePasteInRV(rv, adapter, 0);
+                //deletePasteInRV(rv, adapter, 0);
+                //pasteListSingleton.deletePaste(0);
             }
         });
 
@@ -71,6 +62,7 @@ public class MainActivity extends AppCompatActivity {
 
 
     public void deletePasteInRV(RecyclerView rv, RVAdapter adapter, int indexToDelete) {
+        pasteList = pasteListSingleton.getPasteList();
         if(!pasteList.isEmpty()) {
             rv.removeViewAt(indexToDelete);
             adapter.notifyItemChanged(indexToDelete);
@@ -82,6 +74,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void updateUIifEmptyList(RecyclerView rv) {
+        pasteList = pasteListSingleton.getPasteList();
         if(pasteList.isEmpty()) {
             TextView noData = (TextView)findViewById(R.id.noData);
             noData.setVisibility(View.VISIBLE);

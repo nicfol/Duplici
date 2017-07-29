@@ -90,21 +90,19 @@ public class DBHelper extends SQLiteOpenHelper {
         List<Paste> pasteList = new ArrayList<>();
         SQLiteDatabase db = this.getReadableDatabase();
 
-        Cursor RowCursor = getAllPastes();
-
-        int rows = RowCursor.getCount();
+        int rows = getNoOfRows();
         int lastRow = getLastInsertID() - rows;
         for(int i = 1; i < rows + lastRow + 1; i++) {
-
             try {
                 Cursor res = getPaste(i);
 
                 if(res != null &&  res.moveToFirst()) {
+                    int dbID = res.getInt(res.getColumnIndex(DBHelper.PASTE_COLUMN_ID));
                     String label = res.getString(res.getColumnIndex(DBHelper.PASTE_COLUMN_LABEL));
                     String text = res.getString(res.getColumnIndex(DBHelper.PASTE_COLUMN_TEXT));
                     int icon = res.getInt(res.getColumnIndex(DBHelper.PASTE_COLUMN_ICON));
 
-                    Paste tempPaste = new Paste(label, text, icon);
+                    Paste tempPaste = new Paste(dbID, label, text, icon);
                     pasteList.add(tempPaste);
                     res.close();
                 }
@@ -116,7 +114,6 @@ public class DBHelper extends SQLiteOpenHelper {
         db.close();
         return pasteList;
     }
-
 
     public Cursor getAllPastes() {
         SQLiteDatabase db = this.getReadableDatabase();
@@ -132,6 +129,7 @@ public class DBHelper extends SQLiteOpenHelper {
 
     public int getNoOfRows() {
         SQLiteDatabase db = this.getReadableDatabase();
+
         try {
             return (int) DatabaseUtils.queryNumEntries(db, PASTE_TABLE_NAME);
         } catch (Exception e) {
@@ -149,7 +147,6 @@ public class DBHelper extends SQLiteOpenHelper {
         if(res != null && res.moveToLast()) {
             insertID = res.getInt(0);
         }
-
         return insertID;
     }
 }

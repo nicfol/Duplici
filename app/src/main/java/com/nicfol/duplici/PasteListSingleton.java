@@ -1,14 +1,10 @@
 package com.nicfol.duplici;
 
-import android.app.Activity;
 import android.content.Context;
 
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * Created by Nicolai on 29-07-2017.
- */
 
 class PasteListSingleton {
     private static final PasteListSingleton ourInstance = new PasteListSingleton();
@@ -34,16 +30,28 @@ class PasteListSingleton {
         }
     }
 
-    protected static void insertData(String cLabel, String cText, int cIcon) {
-        Paste tempPaste = new Paste(cLabel, cText, cIcon);
-        pasteList.add(tempPaste);
-
+    protected static void insertPaste(String cLabel, String cText, int cIcon) {
         db = new DBHelper(appContext);
         db.insertPaste(cLabel, cText, cIcon);
+
+        int dbID = db.getLastInsertID();
+        Paste tempPaste = new Paste(dbID, cLabel, cText, cIcon);
+        pasteList.add(tempPaste);
+
         db.close();
     }
 
+    protected static void deletePaste(int dbID) {
+        db = new DBHelper(appContext);
+        db.deletePaste(dbID);
+        db.close();
+    }
 
+    protected static void updatePaste(int dbID, String cLabel, String cText, int cIcon) {
+        db = new DBHelper(appContext);
+        db.updatePaste(dbID, cLabel, cText, cIcon);
+        db.close();
+    }
 
     protected List getPasteList() {
         return pasteList;
