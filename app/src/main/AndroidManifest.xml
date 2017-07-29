@@ -17,17 +17,17 @@
             </intent-filter>
         </activity>
 
-    <service
-        android:name=".QuickSettingsService"
-        android:icon="@drawable/moneybag"
-        android:label="@string/tile_name"
-        android:permission="android.permission.BIND_QUICK_SETTINGS_TILE">
-        <intent-filter>
-            <action
-                android:name="android.service.quicksettings.action.QS_TILE"/>
-        </intent-filter>
-    </service>
+        <service
+            android:name=".QuickSettingsService"
+            android:icon="@drawable/moneybag"
+            android:label="@string/tile_name"
+            android:permission="android.permission.BIND_QUICK_SETTINGS_TILE">
+            <intent-filter>
+                <action android:name="android.service.quicksettings.action.QS_TILE" />
+            </intent-filter>
+        </service>
 
+        <activity android:name=".Create_modify_dialog"></activity>
     </application>
 
 </manifest>

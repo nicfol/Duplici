@@ -1,7 +1,9 @@
 package com.nicfol.duplici;
 
+import android.app.Dialog;
 import android.content.ClipData;
 import android.content.ClipboardManager;
+import android.content.Context;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
@@ -9,6 +11,8 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
+import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.TextView;
 
 import com.afollestad.materialdialogs.MaterialDialog;
@@ -35,7 +39,11 @@ public class MainActivity extends AppCompatActivity {
                         .build());
 
         //Save database to list of pastes
-        pasteList = db.getListOfPastes();
+        //pasteList = db.getListOfPastes();
+
+        PasteListSingleton PS = PasteListSingleton.getInstance();
+        PS.init(this);
+        pasteList = PS.getPasteList();
 
         final RecyclerView rv = (RecyclerView)findViewById(R.id.rv);
         final RVAdapter adapter = new RVAdapter(this, pasteList);
@@ -51,55 +59,46 @@ public class MainActivity extends AppCompatActivity {
         rv.setLayoutManager(llm);
         rv.setAdapter(adapter);
 
-        final MaterialDialog.Builder dialog = new MaterialDialog.Builder(this)
-                .title(R.string.modifyPasteTitle)
-                .content("dothislater")//TODO add content to dialog
-                .positiveText(R.string.modifyPasteAccept)
-                .negativeText(R.string.modifyPasteDiscard);
+        //final MaterialDialog.Builder dialog = new MaterialDialog.Builder(this)
+          //      .title(R.string.modifyPasteTitle)
+            //      .content("dothislater")//TODO add content to dialog
+              //    .positiveText(R.string.modifyPasteAccept)
+                //  .negativeText(R.string.modifyPasteDiscard);
+
+        final Dialog dialog = new Dialog(this);
+        dialog.setContentView(R.layout.fragment_dialog);
+        dialog.setTitle("Title Goes rigt here!");
+
+        TextView text = (TextView)dialog.findViewById(R.id.textView3);
+        TextView text2 = (TextView)dialog.findViewById(R.id.textView4);
+
+        ImageButton button = (ImageButton)dialog.findViewById(R.id.imageButton2);
+
+        Button dialogButton = (Button)dialog.findViewById(R.id.button);
+        Button dialogButton2 = (Button)dialog.findViewById(R.id.button2);
+
+        dialogButton2.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+            }
+        });
 
         //Fab
         final FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
 
-               dialog.show();
+            dialog.show();
 
 
 
-
-                deletePaste(rv, adapter, 0);
-
-                //TODO Remove entry from DB
+            deletePaste(rv, adapter, 0);
             }
         });
 
 
 
-/*
-        final Button updateClipboard = (Button) findViewById(R.id.updateClip);
-        updateClipboard.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-
-                EditText clipLabel = (EditText) findViewById(R.id.label);
-                EditText clipText = (EditText) findViewById(R.id.clip);
-
-                if(clipLabel != null && clipText != null) {
-                    try {
-                        String savedLabel = clipLabel.getText().toString();
-                        String savedText = clipText.getText().toString();
-
-                        db.insertPaste(savedLabel, savedText, "ico");
-
-                        updateClip(savedLabel, savedText);
-
-
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
-                }
-            }
-        });
-*/
     }
 
     public void deletePaste(RecyclerView rv, RVAdapter adapter, int indexToDelete) {
@@ -124,13 +123,6 @@ public class MainActivity extends AppCompatActivity {
             noData.setVisibility(View.GONE);
             rv.setVisibility(View.VISIBLE);
         }
-    }
-
-    private void updateClip(String label, String text) {
-        ClipData clip = ClipData.newPlainText(label, text);
-        ClipboardManager clipboard = null;
-        clipboard.setPrimaryClip(clip);
-        Log.d("Updated Clip:", String.valueOf(clipboard.getPrimaryClipDescription().getLabel()) + " : " + String.valueOf(clipboard.getPrimaryClip().getItemAt(0).getText()));
     }
 
 }
