@@ -63,7 +63,8 @@ public class RVAdapter extends RecyclerView.Adapter<RVAdapter.ViewHolder> {
 
     public RVAdapter(Context mContext, List<Paste> pasteList) {
         this.mContext = mContext;
-        this.pasteList = pasteList;
+        this.pasteList = pasteListSingleton.getPasteList();
+        //-this.pasteList = pasteList;
     }
 
     @Override
@@ -80,9 +81,10 @@ public class RVAdapter extends RecyclerView.Adapter<RVAdapter.ViewHolder> {
         PubRVA = holder;
         holder.setIsRecyclable(false);
         holder.cLabel.setText(pasteList.get(position).getLabel());
+        holder.cText.setText(pasteList.get(position).getText() + pasteList.get(position).getDbID() + " " + position);
+        Log.d("Database: ", "" + pasteList.get(position).getText() + pasteList.get(position).getDbID() + " " + position);
         holder.cText.setText(pasteList.get(position).getText());
-        holder.cText.setText(pasteList.get(position).getText());
-        //holder.cIcon.setImageResource(R.drawable.moneybag); //TODO Assign DB value to imageview
+        //holder.cIcon.setImageResource(R.drawable.moneybag); //-TODO Assign DB value to imageview
 
         holder.cLabel.setEnabled(false);
         holder.cText.setEnabled(false);
@@ -95,6 +97,7 @@ public class RVAdapter extends RecyclerView.Adapter<RVAdapter.ViewHolder> {
                 holder.cText.setEnabled(true);
             }
         });
+
 
         holder.cLabel.addTextChangedListener(new TextWatcher() {
             @Override
@@ -120,7 +123,7 @@ public class RVAdapter extends RecyclerView.Adapter<RVAdapter.ViewHolder> {
         //Listener for save
         holder.saveBtnEdit.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                if(holder.cLabel.getText().length() < 19) {
+                if(holder.cLabel.getText().length() > 19) {
                     //TODO Toast or stuff?
                 } else if(holder.cLabel.getText().length() == 0) {
                     //TODO Toast or stuff?
@@ -133,9 +136,8 @@ public class RVAdapter extends RecyclerView.Adapter<RVAdapter.ViewHolder> {
                     changeLayoutToEditing(holder);
                     holder.cLabel.setEnabled(false);
                     holder.cText.setEnabled(false);
+                    Log.d("save Editing: ", pasteList.get(position).getText() + pasteList.get(position).getLabel());
                 }
-
-
             }
         });
 
@@ -157,7 +159,7 @@ public class RVAdapter extends RecyclerView.Adapter<RVAdapter.ViewHolder> {
             @Override
             public void onClick(View v) {
                 pasteListSingleton.deletePaste(pasteList.get(position).getDbID());
-                pasteList.remove(position);
+                //pasteList.remove(position);
             }
         });
     }

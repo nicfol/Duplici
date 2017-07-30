@@ -91,8 +91,8 @@ public class DBHelper extends SQLiteOpenHelper {
         SQLiteDatabase db = this.getReadableDatabase();
 
         int rows = getNoOfRows();
-        int lastRow = getLastInsertID() - rows;
-        for(int i = 1; i < rows + lastRow + 1; i++) {
+        int lastRowNo = getLastInsertID() - rows;
+        for(int i = 1; i < rows + lastRowNo + 1; i++) {
             try {
                 Cursor res = getPaste(i);
 

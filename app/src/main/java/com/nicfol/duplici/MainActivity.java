@@ -17,7 +17,6 @@ import java.util.Observer;
 
 public class MainActivity extends AppCompatActivity implements Observer {
 
-    List<Paste> tmpList;
     PasteListSingleton pasteListSingleton = PasteListSingleton.getInstance();
 
     RecyclerView rv;
@@ -36,7 +35,6 @@ public class MainActivity extends AppCompatActivity implements Observer {
                         .build());
 
         pasteListSingleton.init(this);
-        tmpList = pasteListSingleton.getPasteList();
 
         pasteListSingleton.addObserver(this);
 

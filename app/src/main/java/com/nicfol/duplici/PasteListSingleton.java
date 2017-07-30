@@ -1,6 +1,7 @@
 package com.nicfol.duplici;
 
 import android.content.Context;
+import android.util.Log;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -28,6 +29,7 @@ class PasteListSingleton extends Observable {
             appContext = context;
             db = new DBHelper(appContext);
             pasteList = db.getListOfPastes();
+            Log.d("","");
         }
     }
 
@@ -45,10 +47,16 @@ class PasteListSingleton extends Observable {
     }
 
     protected void deletePaste(int dbID) {
-        db = new DBHelper(appContext);
-        db.deletePaste(dbID);
-        db.close();
-        notifyChanges();
+        for(int i = 0; i <= pasteList.size()-1; i++) {
+            Log.d("pastelist for counter","" + i );
+            if(pasteList.get(i).getDbID() == dbID) {
+                db = new DBHelper(appContext);
+                db.deletePaste(dbID);
+                db.close();
+                pasteList.remove(i);
+                notifyChanges();
+            }
+        }
     }
 
     protected void updatePaste(int dbID, String cLabel, String cText, int cIcon) {

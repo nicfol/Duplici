@@ -80,7 +80,7 @@
                     android:textColor="@color/colorPrimaryDark"
                     android:gravity="start|center_vertical"
                     android:text="@string/modifyPasteDelete"
-                    
+
                     app:rd_padding="0dp"
                     app:rd_enable="true"/>
 
