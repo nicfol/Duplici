@@ -45,11 +45,11 @@ public class RVAdapter extends RecyclerView.Adapter<RVAdapter.ViewHolder> {
             cLabel = (TextView) itemView.findViewById(R.id.pasteLabel);
             cText = (TextView) itemView.findViewById(R.id.pasteText);
             cIcon = (ImageView) itemView.findViewById(R.id.pasteIcon);
-
             editButton = (ImageButton) itemView.findViewById(R.id.editButton);
 
             //Editing Layout
             dismissBtnEdit = (Button) itemView.findViewById(R.id.dismissBtnEdit);
+
 
         }
     }
@@ -68,6 +68,7 @@ public class RVAdapter extends RecyclerView.Adapter<RVAdapter.ViewHolder> {
 
     @Override
     public void onBindViewHolder(final RVAdapter.ViewHolder holder, int position) {
+
         holder.setIsRecyclable(false);
         holder.cLabel.setText(pasteList.get(position).getLabel());
         holder.cText.setText(pasteList.get(position).getText());
@@ -92,11 +93,9 @@ public class RVAdapter extends RecyclerView.Adapter<RVAdapter.ViewHolder> {
 
     public void changeLayoutToEditing(RVAdapter.ViewHolder holder) {
         if(!isEditModeActive) {
-            holder.normalLayout.setVisibility(View.GONE);
             holder.editLayout.setVisibility(View.VISIBLE);
             isEditModeActive = true;
         } else {
-            holder.normalLayout.setVisibility(View.VISIBLE);
             holder.editLayout.setVisibility(View.GONE);
             isEditModeActive = false;
         }

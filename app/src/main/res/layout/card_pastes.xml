@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     xmlns:app="http://schemas.android.com/apk/res-auto"
@@ -12,15 +12,14 @@
         android:layout_height="wrap_content"
         android:id="@+id/cv"
         app:cardUseCompatPadding="true"
-        android:animateLayoutChanges="true"
-        android:visibility="visible">
-
+        android:animateLayoutChanges="true" >
 
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:padding="16dp"
-            android:id="@+id/normalMode">
+            android:id="@+id/normalMode"
+            android:layout_alignParentTop="true" >
 
             <ImageView
                 android:id="@+id/pasteIcon"
@@ -62,83 +61,39 @@
                 android:layout_centerVertical="true"
                 android:src="@drawable/accountsmall" />
 
-        </RelativeLayout>
 
-
-
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:padding="16dp"
-            android:id="@+id/editMode"
-            android:visibility="gone">
-
-            <ImageView
-                android:id="@+id/pasteIconEdit"
-                android:layout_width="wrap_content"
+            <RelativeLayout
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_alignParentStart="true"
-                android:layout_centerVertical="true"
-                android:layout_marginRight="16dp"
-                android:background="#FFF"
-                android:src="@drawable/accountsmall" />
+                android:paddingTop="16dp"
+                android:id="@+id/editMode"
+                android:visibility="gone"
+                android:layout_below="@+id/pasteText" >
 
-            <TextView
-                android:id="@+id/pasteLabelEdit"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentTop="true"
-                android:layout_toRightOf="@+id/pasteIconEdit"
-                android:text="Stupid Dog"
-                android:textSize="13sp" />
+                <Button
+                    android:id="@+id/deleteBtnEdit"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Delete" />
 
-            <TextView
-                android:id="@+id/pasteTextEdit"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/pasteLabelEdit"
-                android:layout_toLeftOf="@+id/editButtonEdit"
-                android:layout_toRightOf="@+id/pasteIconEdit"
-                android:text="The quick brown fox jumps over the lazy dog"
-                android:textSize="20sp" />
+                <Button
+                    android:id="@+id/dismissBtnEdit"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_toLeftOf="@+id/saveBtnEdit"
+                    android:text="Dismiss" />
 
-            <ImageButton
-                android:id="@+id/editButtonEdit"
-                android:background="#FFF"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentEnd="true"
-                android:layout_alignParentTop="true"
-                android:layout_centerVertical="true"
-                android:src="@drawable/accountsmall"
-                android:visibility="invisible"/>
+                <Button
+                    android:id="@+id/saveBtnEdit"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentEnd="true"
+                    android:text="Save" />
 
-            <Button
-                android:id="@+id/deleteBtnEdit"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Delete"
-                android:layout_below="@+id/pasteTextEdit"
-                android:layout_alignStart="@+id/pasteTextEdit" />
-
-            <Button
-                android:id="@+id/dismissBtnEdit"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_toLeftOf="@+id/saveBtnEdit"
-                android:text="Dismiss"
-                android:layout_below="@+id/pasteTextEdit" />
-
-            <Button
-                android:id="@+id/saveBtnEdit"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentEnd="true"
-                android:text="Save"
-                android:layout_below="@+id/pasteTextEdit" />
+            </RelativeLayout>
 
         </RelativeLayout>
 
     </android.support.v7.widget.CardView>
 
-</LinearLayout>
+</RelativeLayout>
