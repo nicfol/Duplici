@@ -4,4 +4,7 @@
 
     <string name="modifyPasteAccept">Accept</string>
     <string name="modifyPasteDiscard">Discard</string>
+    <string name="modifyPasteDelete">Delete</string>
+    <string name="clickable_image_that_opens_the_editing_menu">Clickable image that opens the editing menu</string>
+    <string name="clickable_image_that_opens_the_menu_to_chose_icon_for_this_paste">Clickable image that opens the menu to chose icon for this paste</string>
 </resources>

@@ -19,7 +19,8 @@
             android:layout_height="wrap_content"
             android:padding="16dp"
             android:id="@+id/normalMode"
-            android:layout_alignParentTop="true" >
+            android:layout_alignParentTop="true"
+            android:contentDescription="@string/clickable_image_that_opens_the_editing_menu" >
 
             <ImageView
                 android:id="@+id/pasteIcon"
@@ -27,7 +28,7 @@
                 android:layout_height="wrap_content"
                 android:layout_alignParentStart="true"
                 android:layout_alignParentRight="true"
-                android:layout_marginRight="16dp"
+                android:layout_marginEnd="16dp"
                 android:background="#FFF"
                 android:src="@drawable/accountsmall" />
 
@@ -36,8 +37,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentTop="true"
-                android:layout_toRightOf="@+id/pasteIcon"
-                android:text="Stupid Dog"
+                android:layout_toEndOf="@+id/pasteIcon"
                 android:textSize="13sp"
                 app:met_maxCharacters="18"
                 app:met_helperText="Label"/>
@@ -47,8 +47,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/pasteLabel"
-                android:layout_toLeftOf="@+id/editButton"
-                android:text="The quick brown fox jumps over the lazy dog"
+                android:layout_toStartOf="@+id/editButton"
                 android:textSize="20sp"
                 android:layout_alignStart="@+id/pasteLabel"
                 app:met_helperText="Paste Text"/>
@@ -61,7 +60,8 @@
                 android:layout_alignParentEnd="true"
                 android:layout_alignParentTop="true"
                 android:layout_centerVertical="true"
-                android:src="@drawable/accountsmall" />
+                android:src="@drawable/accountsmall"
+                android:contentDescription="@string/clickable_image_that_opens_the_menu_to_chose_icon_for_this_paste"/>
 
 
             <RelativeLayout
@@ -76,11 +76,11 @@
                     android:id="@+id/deleteBtnEdit"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Delete"
                     android:background="#ffffff"
                     android:textColor="@color/colorPrimaryDark"
-                    android:gravity="left|center_vertical"
-
+                    android:gravity="start|center_vertical"
+                    android:text="@string/modifyPasteDelete"
+                    
                     app:rd_padding="0dp"
                     app:rd_enable="true"/>
 
@@ -90,7 +90,7 @@
                     android:layout_height="wrap_content"
                     android:layout_toLeftOf="@+id/saveBtnEdit"
                     android:layout_marginEnd="8dp"
-                    android:text="Dismiss"
+                    android:text="@string/modifyPasteDiscard"
                     android:background="#ffffff"
                     android:textColor="@color/colorPrimaryDark"
 
@@ -102,7 +102,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentEnd="true"
-                    android:text="Save Paste"
+                    android:text="@string/modifyPasteAccept"
                     android:background="#ffffff"
                     android:textColor="@color/colorAccent"
 
