@@ -11,41 +11,131 @@
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:id="@+id/cv"
-        app:cardUseCompatPadding="true">
+        app:cardUseCompatPadding="true"
+        android:animateLayoutChanges="true"
+        android:visibility="visible">
+
 
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:padding="16dp">
+            android:padding="16dp"
+            android:id="@+id/normalMode">
 
             <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
                 android:id="@+id/pasteIcon"
-                android:layout_marginRight="16dp"
-                android:src="@drawable/accountsmall"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentStart="true"
+                android:layout_alignParentRight="true"
                 android:layout_centerVertical="true"
-                android:layout_alignParentStart="true" />
+                android:layout_marginRight="16dp"
+                android:background="#FFF"
+                android:src="@drawable/accountsmall" />
 
             <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
                 android:id="@+id/pasteLabel"
-                android:layout_toRightOf="@+id/pasteIcon"
-                android:layout_alignParentTop="true"
-                android:textSize="13sp"
-                android:text="Stupid Dog"
-                />
-
-            <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:id="@+id/pasteText"
-                android:textSize="20sp"
-                android:text="The quick brown fox jumps over the lazy dog"
+                android:layout_alignParentTop="true"
                 android:layout_toRightOf="@+id/pasteIcon"
+                android:text="Stupid Dog"
+                android:textSize="13sp" />
+
+            <TextView
+                android:id="@+id/pasteText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
                 android:layout_below="@+id/pasteLabel"
-                />
+                android:layout_toLeftOf="@+id/editButton"
+                android:text="The quick brown fox jumps over the lazy dog"
+                android:textSize="20sp"
+                android:layout_alignStart="@+id/pasteLabel" />
+
+            <ImageButton
+                android:id="@+id/editButton"
+                android:background="#FFF"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentTop="true"
+                android:layout_centerVertical="true"
+                android:src="@drawable/accountsmall" />
+
+        </RelativeLayout>
+
+
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="16dp"
+            android:id="@+id/editMode"
+            android:visibility="gone">
+
+            <ImageView
+                android:id="@+id/pasteIconEdit"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentStart="true"
+                android:layout_centerVertical="true"
+                android:layout_marginRight="16dp"
+                android:background="#FFF"
+                android:src="@drawable/accountsmall" />
+
+            <TextView
+                android:id="@+id/pasteLabelEdit"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentTop="true"
+                android:layout_toRightOf="@+id/pasteIconEdit"
+                android:text="Stupid Dog"
+                android:textSize="13sp" />
+
+            <TextView
+                android:id="@+id/pasteTextEdit"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/pasteLabelEdit"
+                android:layout_toLeftOf="@+id/editButtonEdit"
+                android:layout_toRightOf="@+id/pasteIconEdit"
+                android:text="The quick brown fox jumps over the lazy dog"
+                android:textSize="20sp" />
+
+            <ImageButton
+                android:id="@+id/editButtonEdit"
+                android:background="#FFF"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentTop="true"
+                android:layout_centerVertical="true"
+                android:src="@drawable/accountsmall"
+                android:visibility="invisible"/>
+
+            <Button
+                android:id="@+id/deleteBtnEdit"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Delete"
+                android:layout_below="@+id/pasteTextEdit"
+                android:layout_alignStart="@+id/pasteTextEdit" />
+
+            <Button
+                android:id="@+id/dismissBtnEdit"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_toLeftOf="@+id/saveBtnEdit"
+                android:text="Dismiss"
+                android:layout_below="@+id/pasteTextEdit" />
+
+            <Button
+                android:id="@+id/saveBtnEdit"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:text="Save"
+                android:layout_below="@+id/pasteTextEdit" />
 
         </RelativeLayout>
 
