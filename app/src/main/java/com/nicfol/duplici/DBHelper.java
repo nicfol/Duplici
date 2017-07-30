@@ -44,7 +44,7 @@ public class DBHelper extends SQLiteOpenHelper {
         }
     }
 
-    public boolean insertPaste(String cLabel, String cText, int cIcon) {
+    public boolean insertPaste(String cLabel, String cText, int cIcon) { //TODO Add priority to DB and sort getListOfPAste by Prio
         try {
             SQLiteDatabase db = getWritableDatabase();
             ContentValues contentValues = new ContentValues();

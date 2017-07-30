@@ -54,8 +54,9 @@ public class MainActivity extends AppCompatActivity {
         fab.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 int del = 3; //TODO Not hardcode this
-                Paste pa = (Paste) pasteListSingleton.getPasteList().get(del);
 
+                //Delete paste from DB by finding it's ID in the list and then update the RV
+                Paste pa = (Paste) pasteListSingleton.getPasteList().get(del);
                 for(int i = 0; i < pasteListSingleton.getLastInsertId(); i ++) {
                     Log.d("Counter: ", String.valueOf(i));
                     if(pasteList.get(del) != null) {
@@ -69,7 +70,6 @@ public class MainActivity extends AppCompatActivity {
                         }
                     }
                 }
-                updateRV(rv, adapter);
             }
         });
     }
