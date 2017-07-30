@@ -1,13 +1,18 @@
 package com.nicfol.duplici;
 
 import android.content.Context;
+import android.graphics.Color;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
+import android.text.Editable;
 import android.text.Layout;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -28,7 +33,7 @@ public class RVAdapter extends RecyclerView.Adapter<RVAdapter.ViewHolder> {
         public View editLayout;
 
         //Normal Layout views
-        public TextView cLabel, cText;
+        public EditText cLabel, cText;
         public ImageView cIcon;
         public ImageButton editButton;
 
@@ -44,8 +49,8 @@ public class RVAdapter extends RecyclerView.Adapter<RVAdapter.ViewHolder> {
             isEditModeActive = false;
 
             //Normal layout
-            cLabel = (TextView) itemView.findViewById(R.id.pasteLabel);
-            cText = (TextView) itemView.findViewById(R.id.pasteText);
+            cLabel = (EditText) itemView.findViewById(R.id.pasteLabel);
+            cText = (EditText) itemView.findViewById(R.id.pasteText);
             cIcon = (ImageView) itemView.findViewById(R.id.pasteIcon);
             editButton = (ImageButton) itemView.findViewById(R.id.editButton);
 
@@ -68,58 +73,103 @@ public class RVAdapter extends RecyclerView.Adapter<RVAdapter.ViewHolder> {
         return new ViewHolder(itemView);
     }
 
+    public RVAdapter.ViewHolder PubRVA;
+
     @Override
     public void onBindViewHolder(final RVAdapter.ViewHolder holder, final int position) {
+        PubRVA = holder;
         holder.setIsRecyclable(false);
         holder.cLabel.setText(pasteList.get(position).getLabel());
         holder.cText.setText(pasteList.get(position).getText());
+        holder.cText.setText(pasteList.get(position).getText());
         //holder.cIcon.setImageResource(R.drawable.moneybag); //TODO Assign DB value to imageview
+
+        holder.cLabel.setEnabled(false);
+        holder.cText.setEnabled(false);
 
         //Event Listener for editing the layout
         holder.editButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 changeLayoutToEditing(holder);
+                holder.cLabel.setEnabled(true);
+                holder.cText.setEnabled(true);
             }
         });
-        //Event Listener for editing the layout
-        holder.saveBtnEdit.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-                changeLayoutToEditing(holder);
-            }
-        });
-        //Event Listener for editing the layout
-        holder.dismissBtnEdit.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-                changeLayoutToEditing(holder);
-                Log.d("Dismiss Button: ", "Has been pressed");
-            }
-        });
-        holder.deleteBtnEdit.setOnClickListener(new View.OnClickListener() {
+
+        holder.cLabel.addTextChangedListener(new TextWatcher() {
             @Override
-            public void onClick(View v) {
-                int del = position;
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            }
 
-                //Delete paste from DB by finding it's ID in the list and then update the RV
-                Paste pa = (Paste) pasteListSingleton.getPasteList().get(del);
-                for(int i = 0; i < pasteListSingleton.getLastInsertId(); i ++) {
-                    if(pasteList.get(del) != null && pasteList.get(i).getDbID() == pa.getDbID()) {
-                        pasteListSingleton.deletePaste(pa.getDbID());
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+            }
 
-                        pasteListSingleton.deletePaste(i);
-                        break;
-                    }
+            @Override
+            public void afterTextChanged(Editable s) {
+                if(holder.cLabel.getText().length() == 0 || holder.cLabel.getText().length() > 18) {
+                    holder.saveBtnEdit.setEnabled(false);
+                    holder.saveBtnEdit.setTextColor(Color.rgb(200,200,200));
+                } else {
+                    holder.saveBtnEdit.setEnabled(true);
+                    holder.saveBtnEdit.setTextColor(ContextCompat.getColor(mContext, R.color.colorAccent));
                 }
             }
         });
 
+        //Listener for save
+        holder.saveBtnEdit.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                if(holder.cLabel.getText().length() < 19) {
+                    //TODO Toast or stuff?
+                } else if(holder.cLabel.getText().length() == 0) {
+                    //TODO Toast or stuff?
+                } else {
+                    pasteListSingleton.updatePaste(pasteList.get(position).getDbID(), String.valueOf(holder.cLabel.getText()), String.valueOf(holder.cText.getText()), 10);
+
+                    holder.cLabel.setText(pasteList.get(position).getLabel());
+                    holder.cText.setText(pasteList.get(position).getText());
+
+                    changeLayoutToEditing(holder);
+                    holder.cLabel.setEnabled(false);
+                    holder.cText.setEnabled(false);
+                }
+
+
+            }
+        });
+
+        //Listener for dismiss
+        holder.dismissBtnEdit.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                changeLayoutToEditing(holder);
+                holder.cLabel.setText(pasteList.get(position).getLabel());
+                holder.cText.setText(pasteList.get(position).getText());
+
+
+                holder.cLabel.setEnabled(false);
+                holder.cText.setEnabled(false);
+            }
+        });
+
+        //Listener for delete
+        holder.deleteBtnEdit.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                pasteListSingleton.deletePaste(pasteList.get(position).getDbID());
+                pasteList.remove(position);
+            }
+        });
     }
 
     public void changeLayoutToEditing(RVAdapter.ViewHolder holder) {
         if(!isEditModeActive) {
             holder.editLayout.setVisibility(View.VISIBLE);
+            holder.editButton.setEnabled(false);
             isEditModeActive = true;
         } else {
             holder.editLayout.setVisibility(View.GONE);
+            holder.editButton.setEnabled(true);
             isEditModeActive = false;
         }
     }

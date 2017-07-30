@@ -1,10 +1,7 @@
 <resources>
     <string name="app_name">Duplici</string>
     <string name="tile_name">DupliciTile</string>
-    <string name="modifyPasteTitle">Modify Paste</string>
+
     <string name="modifyPasteAccept">Accept</string>
     <string name="modifyPasteDiscard">Discard</string>
-
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>

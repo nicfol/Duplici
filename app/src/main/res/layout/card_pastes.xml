@@ -31,16 +31,18 @@
                 android:background="#FFF"
                 android:src="@drawable/accountsmall" />
 
-            <TextView
+            <com.rengwuxian.materialedittext.MaterialEditText
                 android:id="@+id/pasteLabel"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentTop="true"
                 android:layout_toRightOf="@+id/pasteIcon"
                 android:text="Stupid Dog"
-                android:textSize="13sp" />
+                android:textSize="13sp"
+                app:met_maxCharacters="18"
+                app:met_helperText="Label"/>
 
-            <TextView
+            <com.rengwuxian.materialedittext.MaterialEditText
                 android:id="@+id/pasteText"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -48,7 +50,8 @@
                 android:layout_toLeftOf="@+id/editButton"
                 android:text="The quick brown fox jumps over the lazy dog"
                 android:textSize="20sp"
-                android:layout_alignStart="@+id/pasteLabel" />
+                android:layout_alignStart="@+id/pasteLabel"
+                app:met_helperText="Paste Text"/>
 
             <ImageButton
                 android:id="@+id/editButton"
@@ -76,6 +79,7 @@
                     android:text="Delete"
                     android:background="#ffffff"
                     android:textColor="@color/colorPrimaryDark"
+                    android:gravity="left|center_vertical"
 
                     app:rd_padding="0dp"
                     app:rd_enable="true"/>

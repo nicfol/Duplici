@@ -11,11 +11,13 @@ import android.widget.TextView;
 
 import com.facebook.stetho.Stetho;
 
+import java.util.List;
 import java.util.Observable;
 import java.util.Observer;
 
 public class MainActivity extends AppCompatActivity implements Observer {
 
+    List<Paste> tmpList;
     PasteListSingleton pasteListSingleton = PasteListSingleton.getInstance();
 
     RecyclerView rv;
@@ -34,6 +36,7 @@ public class MainActivity extends AppCompatActivity implements Observer {
                         .build());
 
         pasteListSingleton.init(this);
+        tmpList = pasteListSingleton.getPasteList();
 
         pasteListSingleton.addObserver(this);
 
@@ -41,11 +44,6 @@ public class MainActivity extends AppCompatActivity implements Observer {
         adapter = new RVAdapter(this, pasteListSingleton.getPasteList());
 
         LinearLayoutManager llm = new LinearLayoutManager(this);
-
-        for(int i = 1; i < adapter.getItemCount(); i++) {
-            Paste tmpPaste = (Paste) pasteListSingleton.getPasteList().get(i);
-            Log.d("Paste: " + i + " ", String.valueOf(tmpPaste.getLabel()));
-        }
 
         //Hide RV if there's nothing to show
         updateUIifEmptyList(rv);
@@ -55,13 +53,13 @@ public class MainActivity extends AppCompatActivity implements Observer {
         rv.setAdapter(adapter);
         rv.isInEditMode();
 
-        pasteListSingleton.insertPaste("new", String.valueOf(Math.random()), 10);
-
         //Fab
         final FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-            updateRV(rv, adapter);
+                pasteListSingleton.insertPaste("Paste Label","Text",10);
+                updateRV(rv, adapter);
+                adapter.notifyItemInserted(pasteListSingleton.getPasteList().size()-1);
             }
         });
     }
@@ -72,17 +70,6 @@ public class MainActivity extends AppCompatActivity implements Observer {
 
         adapter.notifyDataSetChanged();
         updateUIifEmptyList(rv);
-    }
-
-    public void updateRV(RecyclerView rv, RVAdapter adapter, int indexToDelete) {
-        if(!pasteListSingleton.getPasteList().isEmpty()) {
-            rv.removeViewAt(indexToDelete);
-            adapter.notifyItemChanged(indexToDelete);
-            adapter.notifyItemRangeChanged(indexToDelete, pasteListSingleton.getPasteList().size());
-
-            adapter.notifyDataSetChanged();
-            updateUIifEmptyList(rv);
-        }
     }
 
     private void updateUIifEmptyList(RecyclerView rv) {
@@ -100,7 +87,8 @@ public class MainActivity extends AppCompatActivity implements Observer {
     @Override
     public void update(Observable o, Object arg) {
         ((PasteListSingleton) o ).getPasteList();
-        Log.d("Observer update", "change found");
+        Log.d("Observer update", String.valueOf(pasteListSingleton.getPasteList().size()));
         updateRV(rv, adapter);
+        updateUIifEmptyList(rv);
     }
 }
