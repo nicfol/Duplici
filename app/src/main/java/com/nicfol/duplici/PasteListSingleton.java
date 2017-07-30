@@ -55,6 +55,7 @@ class PasteListSingleton extends Observable {
                 db.close();
                 pasteList.remove(i);
                 notifyChanges();
+                break;
             }
         }
     }
