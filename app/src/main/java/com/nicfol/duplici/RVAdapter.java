@@ -19,6 +19,7 @@ public class RVAdapter extends RecyclerView.Adapter<RVAdapter.ViewHolder> {
 
     private Context mContext;
     private List<Paste> pasteList;
+    private PasteListSingleton pasteListSingleton = PasteListSingleton.getInstance();
 
     private boolean isEditModeActive;
 
@@ -32,13 +33,14 @@ public class RVAdapter extends RecyclerView.Adapter<RVAdapter.ViewHolder> {
         public ImageButton editButton;
 
         //Edit Layout Views
-        public Button dismissBtnEdit;
+        public Button dismissBtnEdit, saveBtnEdit, deleteBtnEdit;
 
         public ViewHolder(View itemView) {
             super(itemView);
+            itemView.isInEditMode();
 
-            normalLayout = (View) itemView.findViewById(R.id.normalMode);
-            editLayout = (View) itemView.findViewById(R.id.editMode);
+            normalLayout = itemView.findViewById(R.id.normalMode);
+            editLayout = itemView.findViewById(R.id.editMode);
             isEditModeActive = false;
 
             //Normal layout
@@ -49,8 +51,8 @@ public class RVAdapter extends RecyclerView.Adapter<RVAdapter.ViewHolder> {
 
             //Editing Layout
             dismissBtnEdit = (Button) itemView.findViewById(R.id.dismissBtnEdit);
-
-
+            saveBtnEdit = (Button) itemView.findViewById(R.id.saveBtnEdit);
+            deleteBtnEdit = (Button) itemView.findViewById(R.id.deleteBtnEdit);
         }
     }
 
@@ -67,17 +69,20 @@ public class RVAdapter extends RecyclerView.Adapter<RVAdapter.ViewHolder> {
     }
 
     @Override
-    public void onBindViewHolder(final RVAdapter.ViewHolder holder, int position) {
-
+    public void onBindViewHolder(final RVAdapter.ViewHolder holder, final int position) {
         holder.setIsRecyclable(false);
         holder.cLabel.setText(pasteList.get(position).getLabel());
         holder.cText.setText(pasteList.get(position).getText());
         //holder.cIcon.setImageResource(R.drawable.moneybag); //TODO Assign DB value to imageview
 
-
-
         //Event Listener for editing the layout
         holder.editButton.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                changeLayoutToEditing(holder);
+            }
+        });
+        //Event Listener for editing the layout
+        holder.saveBtnEdit.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 changeLayoutToEditing(holder);
             }
@@ -89,6 +94,24 @@ public class RVAdapter extends RecyclerView.Adapter<RVAdapter.ViewHolder> {
                 Log.d("Dismiss Button: ", "Has been pressed");
             }
         });
+        holder.deleteBtnEdit.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                int del = position;
+
+                //Delete paste from DB by finding it's ID in the list and then update the RV
+                Paste pa = (Paste) pasteListSingleton.getPasteList().get(del);
+                for(int i = 0; i < pasteListSingleton.getLastInsertId(); i ++) {
+                    if(pasteList.get(del) != null && pasteList.get(i).getDbID() == pa.getDbID()) {
+                        pasteListSingleton.deletePaste(pa.getDbID());
+
+                        pasteListSingleton.deletePaste(i);
+                        break;
+                    }
+                }
+            }
+        });
+
     }
 
     public void changeLayoutToEditing(RVAdapter.ViewHolder holder) {

@@ -4,9 +4,10 @@ import android.content.Context;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Observable;
 
 
-class PasteListSingleton {
+class PasteListSingleton extends Observable {
     private static final PasteListSingleton ourInstance = new PasteListSingleton();
 
     static PasteListSingleton getInstance() {
@@ -30,7 +31,7 @@ class PasteListSingleton {
         }
     }
 
-    protected static void insertPaste(String cLabel, String cText, int cIcon) {
+    protected void insertPaste(String cLabel, String cText, int cIcon) {
         //Add new paste to DB
         db = new DBHelper(appContext);
         db.insertPaste(cLabel, cText, cIcon);
@@ -39,19 +40,22 @@ class PasteListSingleton {
         Paste tempPaste = new Paste(db.getLastInsertID()+1, cLabel, cText, cIcon);
         pasteList.add(tempPaste);
 
+        notifyChanges();
         db.close();
     }
 
-    protected static void deletePaste(int dbID) {
+    protected void deletePaste(int dbID) {
         db = new DBHelper(appContext);
         db.deletePaste(dbID);
         db.close();
+        notifyChanges();
     }
 
-    protected static void updatePaste(int dbID, String cLabel, String cText, int cIcon) {
+    protected void updatePaste(int dbID, String cLabel, String cText, int cIcon) {
         db = new DBHelper(appContext);
         db.updatePaste(dbID, cLabel, cText, cIcon);
         db.close();
+        notifyChanges();
     }
 
     protected List getPasteList() {
@@ -63,4 +67,12 @@ class PasteListSingleton {
         return db.getLastInsertID();
     }
 
+    public Paste getPaste(int i) {
+        return pasteList.get(i);
+    }
+
+    public void notifyChanges() {
+        setChanged();
+        notifyObservers(pasteList);
+    }
 }

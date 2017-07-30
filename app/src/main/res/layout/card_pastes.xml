@@ -27,7 +27,6 @@
                 android:layout_height="wrap_content"
                 android:layout_alignParentStart="true"
                 android:layout_alignParentRight="true"
-                android:layout_centerVertical="true"
                 android:layout_marginRight="16dp"
                 android:background="#FFF"
                 android:src="@drawable/accountsmall" />
@@ -70,25 +69,41 @@
                 android:visibility="gone"
                 android:layout_below="@+id/pasteText" >
 
-                <Button
+                <com.rey.material.widget.Button
                     android:id="@+id/deleteBtnEdit"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Delete" />
+                    android:text="Delete"
+                    android:background="#ffffff"
+                    android:textColor="@color/colorPrimaryDark"
 
-                <Button
+                    app:rd_padding="0dp"
+                    app:rd_enable="true"/>
+
+                <com.rey.material.widget.Button
                     android:id="@+id/dismissBtnEdit"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_toLeftOf="@+id/saveBtnEdit"
-                    android:text="Dismiss" />
+                    android:layout_marginEnd="8dp"
+                    android:text="Dismiss"
+                    android:background="#ffffff"
+                    android:textColor="@color/colorPrimaryDark"
 
-                <Button
+                    app:rd_padding="0dp"
+                    app:rd_enable="true" />
+
+                <com.rey.material.widget.Button
                     android:id="@+id/saveBtnEdit"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentEnd="true"
-                    android:text="Save" />
+                    android:text="Save Paste"
+                    android:background="#ffffff"
+                    android:textColor="@color/colorAccent"
+
+                    app:rd_padding="0dp"
+                    app:rd_enable="true" />
 
             </RelativeLayout>
 

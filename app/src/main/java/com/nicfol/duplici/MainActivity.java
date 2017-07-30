@@ -11,12 +11,15 @@ import android.widget.TextView;
 
 import com.facebook.stetho.Stetho;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.Observable;
+import java.util.Observer;
 
-public class MainActivity extends AppCompatActivity {
-    private List<Paste> pasteList = new ArrayList<>();
+public class MainActivity extends AppCompatActivity implements Observer {
+
     PasteListSingleton pasteListSingleton = PasteListSingleton.getInstance();
+
+    RecyclerView rv;
+    RVAdapter adapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,10 +34,12 @@ public class MainActivity extends AppCompatActivity {
                         .build());
 
         pasteListSingleton.init(this);
-        updatePasteList();
 
-        final RecyclerView rv = (RecyclerView)findViewById(R.id.rv);
-        final RVAdapter adapter = new RVAdapter(this, pasteList);
+        pasteListSingleton.addObserver(this);
+
+        rv = (RecyclerView)findViewById(R.id.rv);
+        adapter = new RVAdapter(this, pasteListSingleton.getPasteList());
+
         LinearLayoutManager llm = new LinearLayoutManager(this);
 
         for(int i = 1; i < adapter.getItemCount(); i++) {
@@ -48,43 +53,29 @@ public class MainActivity extends AppCompatActivity {
         //Assign layout manager to the RV Adapter
         rv.setLayoutManager(llm);
         rv.setAdapter(adapter);
+        rv.isInEditMode();
+
+        pasteListSingleton.insertPaste("new", String.valueOf(Math.random()), 10);
 
         //Fab
         final FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                int del = 3; //TODO Not hardcode this
-
-                //Delete paste from DB by finding it's ID in the list and then update the RV
-                Paste pa = (Paste) pasteListSingleton.getPasteList().get(del);
-                for(int i = 0; i < pasteListSingleton.getLastInsertId(); i ++) {
-                    Log.d("Counter: ", String.valueOf(i));
-                    if(pasteList.get(del) != null) {
-                        if ( pasteList.get(i).getDbID() == pa.getDbID()) {
-                            Log.d(String.valueOf(i), String.valueOf(pa.getDbID()));
-                            pasteListSingleton.deletePaste(pa.getDbID());
-
-                            pasteList.remove(del);
-                            updateRV(rv, adapter, del);
-                            break;
-                        }
-                    }
-                }
+            updateRV(rv, adapter);
             }
         });
     }
 
     public void updateRV(RecyclerView rv, RVAdapter adapter) {
         adapter.notifyItemChanged(pasteListSingleton.getPasteList().size());
-        adapter.notifyItemRangeChanged(pasteListSingleton.getPasteList().size(), pasteListSingleton.getPasteList().size());
+        adapter.notifyItemRangeChanged(0, pasteListSingleton.getPasteList().size());
 
         adapter.notifyDataSetChanged();
         updateUIifEmptyList(rv);
     }
 
     public void updateRV(RecyclerView rv, RVAdapter adapter, int indexToDelete) {
-        updatePasteList();
-        if(!pasteList.isEmpty()) {
+        if(!pasteListSingleton.getPasteList().isEmpty()) {
             rv.removeViewAt(indexToDelete);
             adapter.notifyItemChanged(indexToDelete);
             adapter.notifyItemRangeChanged(indexToDelete, pasteListSingleton.getPasteList().size());
@@ -95,8 +86,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void updateUIifEmptyList(RecyclerView rv) {
-        updatePasteList();
-        if(pasteList.isEmpty()) {
+        if(pasteListSingleton.getPasteList().isEmpty()) {
             TextView noData = (TextView)findViewById(R.id.noData);
             noData.setVisibility(View.VISIBLE);
             rv.setVisibility(View.GONE);
@@ -107,8 +97,10 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    public void updatePasteList() {
-        pasteList = pasteListSingleton.getPasteList();
+    @Override
+    public void update(Observable o, Object arg) {
+        ((PasteListSingleton) o ).getPasteList();
+        Log.d("Observer update", "change found");
+        updateRV(rv, adapter);
     }
-
 }
