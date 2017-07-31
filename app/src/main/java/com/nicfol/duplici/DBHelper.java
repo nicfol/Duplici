@@ -123,8 +123,9 @@ public class DBHelper extends SQLiteOpenHelper {
 
     public void deletePaste(Integer id) {
         SQLiteDatabase db = this.getWritableDatabase();
-        db.delete(PASTE_TABLE_NAME, PASTE_COLUMN_ID + " = ?",
+        db.delete(PASTE_TABLE_NAME, PASTE_COLUMN_ID + " =? ",
                 new String[]{Long.toString(id)} );
+        db.close();
     }
 
     public int getNoOfRows() {
