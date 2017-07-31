@@ -11,7 +11,6 @@ import android.widget.TextView;
 
 import com.facebook.stetho.Stetho;
 
-import java.util.List;
 import java.util.Observable;
 import java.util.Observer;
 
