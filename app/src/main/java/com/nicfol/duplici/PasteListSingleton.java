@@ -9,10 +9,10 @@ import java.util.Observable;
 
 
 class PasteListSingleton extends Observable {
-    private static final PasteListSingleton ourInstance = new PasteListSingleton();
+    private static final PasteListSingleton thisInstance = new PasteListSingleton();
 
     static PasteListSingleton getInstance() {
-        return ourInstance;
+        return thisInstance;
     }
 
     private PasteListSingleton() { }
@@ -28,7 +28,7 @@ class PasteListSingleton extends Observable {
         if(context != null){
             appContext = context;
             db = new DBHelper(appContext);
-            pasteList = db.getListOfPastes();
+            pasteList = db.getListOfPastesFromDb();
             Log.d("","");
         }
     }
@@ -36,7 +36,7 @@ class PasteListSingleton extends Observable {
     protected void insertPaste(String cLabel, String cText, int cIcon) {
         //Add new paste to DB
         db = new DBHelper(appContext);
-        db.insertPaste(cLabel, cText, cIcon);
+        db.insertPasteToDb(cLabel, cText, cIcon);
 
         //Add new paste to memory list
         Paste tempPaste = new Paste(db.getLastInsertID()+1, cLabel, cText, cIcon);
@@ -48,10 +48,9 @@ class PasteListSingleton extends Observable {
 
     protected void deletePaste(int dbID) {
         for(int i = 0; i <= pasteList.size()-1; i++) {
-            Log.d("pastelist for counter","" + i );
-            if(pasteList.get(i).getDbID() == dbID) {
+            if(pasteList.get(i).getDbID() == dbID) { //TODO Implement here fool
                 db = new DBHelper(appContext);
-                db.deletePaste(dbID);
+                db.deletePasteFromDb(dbID);
                 db.close();
                 pasteList.remove(i);
                 notifyChanges();
@@ -60,9 +59,18 @@ class PasteListSingleton extends Observable {
         }
     }
 
+    protected int findPasteByDBid(int dbID) { //Todo implement this
+        for(int i = 0; i <= pasteList.size()-1; i++) {
+            if(pasteList.get(i).getDbID() == dbID) {
+                return i;
+            }
+        }
+        return -1;
+    }
+
     protected void updatePaste(int dbID, String cLabel, String cText, int cIcon) {
         db = new DBHelper(appContext);
-        db.updatePaste(dbID, cLabel, cText, cIcon);
+        db.updatePasteInDb(dbID, cLabel, cText, cIcon);
         db.close();
         notifyChanges();
     }

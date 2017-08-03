@@ -62,7 +62,7 @@ public class QuickSettingsService extends TileService {
                 String savedLabel = clipLabel.getText().toString();
                 String savedText = clipText.getText().toString();
 
-                db.insertPaste(savedLabel, savedText, "ico");
+                db.insertPasteToDb(savedLabel, savedText, "ico");
 
                 updateClip(savedLabel, savedText);
 

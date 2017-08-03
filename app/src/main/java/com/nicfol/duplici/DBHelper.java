@@ -7,7 +7,6 @@ import android.database.Cursor;
 import android.database.DatabaseUtils;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
-import android.util.Log;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -44,7 +43,7 @@ public class DBHelper extends SQLiteOpenHelper {
         }
     }
 
-    public boolean insertPaste(String cLabel, String cText, int cIcon) { //TODO Add priority to DB and sort getListOfPAste by Prio
+    public boolean insertPasteToDb(String cLabel, String cText, int cIcon) { //TODO Add priority to DB and sort getListOfPAste by Prio
         try {
             SQLiteDatabase db = getWritableDatabase();
             ContentValues contentValues = new ContentValues();
@@ -61,7 +60,7 @@ public class DBHelper extends SQLiteOpenHelper {
         }
     }
 
-    public boolean updatePaste(Integer id, String cLabel, String cText, int cIcon) {
+    public boolean updatePasteInDb(Integer id, String cLabel, String cText, int cIcon) {
         try {
             SQLiteDatabase db = getWritableDatabase();
             ContentValues contentValues = new ContentValues();
@@ -78,7 +77,7 @@ public class DBHelper extends SQLiteOpenHelper {
         }
     }
 
-    public Cursor getPaste(int id) {
+    public Cursor getPasteFromDb(int id) {
         SQLiteDatabase db = this.getReadableDatabase();
         Cursor res = db.rawQuery( "SELECT * FROM " + PASTE_TABLE_NAME + " WHERE " + PASTE_COLUMN_ID + "=?",
                 new String[] {Integer.toString(id)});
@@ -86,7 +85,7 @@ public class DBHelper extends SQLiteOpenHelper {
     }
 
 
-    public List<Paste> getListOfPastes() {
+    public List<Paste> getListOfPastesFromDb() {
         List<Paste> pasteList = new ArrayList<>();
         SQLiteDatabase db = this.getReadableDatabase();
 
@@ -94,7 +93,7 @@ public class DBHelper extends SQLiteOpenHelper {
         int lastRowNo = getLastInsertID() - rows;
         for(int i = 1; i < rows + lastRowNo + 1; i++) {
             try {
-                Cursor res = getPaste(i);
+                Cursor res = getPasteFromDb(i);
 
                 if(res != null &&  res.moveToFirst()) {
                     int dbID = res.getInt(res.getColumnIndex(DBHelper.PASTE_COLUMN_ID));
@@ -115,13 +114,13 @@ public class DBHelper extends SQLiteOpenHelper {
         return pasteList;
     }
 
-    public Cursor getAllPastes() {
+    public Cursor getAllPastesFromDb() {
         SQLiteDatabase db = this.getReadableDatabase();
         Cursor res = db.rawQuery( "SELECT * FROM " + PASTE_TABLE_NAME, null);
         return res;
     }
 
-    public void deletePaste(Integer id) {
+    public void deletePasteFromDb(Integer id) {
         SQLiteDatabase db = this.getWritableDatabase();
         db.delete(PASTE_TABLE_NAME, PASTE_COLUMN_ID + " =? ",
                 new String[]{Long.toString(id)} );
@@ -144,7 +143,7 @@ public class DBHelper extends SQLiteOpenHelper {
     public int getLastInsertID() {
         //TODO Catch some edge cases here
         int insertID = -1;
-        Cursor res = getAllPastes();
+        Cursor res = getAllPastesFromDb();
         if(res != null && res.moveToLast()) {
             insertID = res.getInt(0);
         }
