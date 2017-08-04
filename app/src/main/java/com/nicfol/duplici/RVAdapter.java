@@ -17,6 +17,8 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 
+import net.steamcrafted.materialiconlib.MaterialDrawableBuilder;
+
 import java.util.List;
 
 
@@ -85,7 +87,15 @@ public class RVAdapter extends RecyclerView.Adapter<RVAdapter.ViewHolder> {
         holder.cText.setText(pasteList.get(position).getText() + pasteList.get(position).getDbID() + " " + position);
         Log.d("Database: ", "" + pasteList.get(position).getText() + pasteList.get(position).getDbID() + " " + position);
         holder.cText.setText(pasteList.get(position).getText());
-        //holder.cIcon.setImageResource(R.drawable.moneybag); //-TODO Assign DB value to imageview
+
+        //holder.cIcon.setImageResource(R.drawable.moneybag); //TODO (OLD) Assign DB value to imageview
+
+        //Update icon to match DB
+        holder.cIcon.setImageDrawable(MaterialDrawableBuilder.with(mContext)
+                .setIcon(MaterialDrawableBuilder.IconValue.BORDER_COLOR)
+                .setColor(Color.BLACK)
+                .build()
+        );
 
         holder.cLabel.setEnabled(false);
         holder.cText.setEnabled(false);
@@ -99,6 +109,14 @@ public class RVAdapter extends RecyclerView.Adapter<RVAdapter.ViewHolder> {
             }
         });
 
+        //Listener for icon
+        holder.cIcon.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Log.d("RVA","Icon image clicked!");
+                //TODO Launch dialog with icons to select from
+            }
+        });
 
         //Listener for text changes
         holder.cLabel.addTextChangedListener(new TextWatcher() {

@@ -22,15 +22,15 @@
             android:layout_alignParentTop="true"
             android:contentDescription="@string/clickable_image_that_opens_the_editing_menu" >
 
-            <ImageView
+            <net.steamcrafted.materialiconlib.MaterialIconView
+                xmlns:app="http://schemas.android.com/apk/res-auto"
                 android:id="@+id/pasteIcon"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentStart="true"
                 android:layout_alignParentRight="true"
                 android:layout_marginEnd="16dp"
-                android:background="#FFF"
-                android:src="@drawable/accountsmall" />
+                android:background="#FFF" />
 
             <com.rengwuxian.materialedittext.MaterialEditText
                 android:id="@+id/pasteLabel"
