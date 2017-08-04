@@ -39,6 +39,8 @@
                 android:layout_alignParentTop="true"
                 android:layout_toEndOf="@+id/pasteIcon"
                 android:textSize="13sp"
+                android:minEms="18"
+                android:maxEms="18"
                 app:met_maxCharacters="18"
                 app:met_helperText="Label"/>
 
