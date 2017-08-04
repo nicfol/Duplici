@@ -39,27 +39,24 @@ class PasteListSingleton extends Observable {
         db.insertPasteToDb(cLabel, cText, cIcon);
 
         //Add new paste to memory list
-        Paste tempPaste = new Paste(db.getLastInsertID()+1, cLabel, cText, cIcon);
-        pasteList.add(tempPaste);
+        pasteList.add(new Paste(db.getLastInsertID()+1, cLabel, cText, cIcon));
 
         notifyChanges();
         db.close();
     }
 
     protected void deletePaste(int dbID) {
-        for(int i = 0; i <= pasteList.size()-1; i++) {
-            if(pasteList.get(i).getDbID() == dbID) { //TODO Implement here fool
-                db = new DBHelper(appContext);
-                db.deletePasteFromDb(dbID);
-                db.close();
-                pasteList.remove(i);
-                notifyChanges();
-                break;
-            }
-        }
+        int listIndex = findPasteByDBid(dbID);
+
+        db = new DBHelper(appContext);
+        db.deletePasteFromDb(dbID);
+        db.close();
+
+        pasteList.remove(listIndex);
+        notifyChanges();
     }
 
-    protected int findPasteByDBid(int dbID) { //Todo implement this
+    protected int findPasteByDBid(int dbID) {
         for(int i = 0; i <= pasteList.size()-1; i++) {
             if(pasteList.get(i).getDbID() == dbID) {
                 return i;
@@ -68,10 +65,13 @@ class PasteListSingleton extends Observable {
         return -1;
     }
 
-    protected void updatePaste(int dbID, String cLabel, String cText, int cIcon) {
+    protected void updatePaste(int position, int dbID, String cLabel, String cText, int cIcon) {
         db = new DBHelper(appContext);
         db.updatePasteInDb(dbID, cLabel, cText, cIcon);
         db.close();
+
+        pasteList.set(position, new Paste(dbID, cLabel, cText, cIcon));
+
         notifyChanges();
     }
 

@@ -79,6 +79,7 @@ public class RVAdapter extends RecyclerView.Adapter<RVAdapter.ViewHolder> {
     @Override
     public void onBindViewHolder(final RVAdapter.ViewHolder holder, final int position) {
         PubRVA = holder;
+
         holder.setIsRecyclable(false);
         holder.cLabel.setText(pasteList.get(position).getLabel());
         holder.cText.setText(pasteList.get(position).getText() + pasteList.get(position).getDbID() + " " + position);
@@ -129,10 +130,10 @@ public class RVAdapter extends RecyclerView.Adapter<RVAdapter.ViewHolder> {
                 } else if(holder.cLabel.getText().length() == 0) {
                     //TODO Toast or stuff?
                 } else {
-                    pasteListSingleton.updatePaste(pasteList.get(position).getDbID(), String.valueOf(holder.cLabel.getText()), String.valueOf(holder.cText.getText()), 10);
+                    pasteListSingleton.updatePaste(position, pasteList.get(position).getDbID(), String.valueOf(holder.cLabel.getText()), String.valueOf(holder.cText.getText()), 10);
 
-                    holder.cLabel.setText(pasteList.get(position).getLabel());
-                    holder.cText.setText(pasteList.get(position).getText());
+                    holder.cLabel.setText(holder.cLabel.getText());
+                    holder.cText.setText(holder.cText.getText());
 
                     changeLayoutToEditing(holder);
                     holder.cLabel.setEnabled(false);

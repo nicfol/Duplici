@@ -27,7 +27,6 @@
             </intent-filter>
         </service>
 
-        <activity android:name=".Create_modify_dialog"></activity>
     </application>
 
 </manifest>

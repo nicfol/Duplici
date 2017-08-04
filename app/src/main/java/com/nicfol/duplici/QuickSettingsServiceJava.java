@@ -8,8 +8,9 @@ import android.os.Build;
 import android.service.quicksettings.TileService;
 import android.util.Log;
 
+
 @TargetApi(Build.VERSION_CODES.N)
-public class QuickSettingsService extends TileService {
+public class QuickSettingsServiceJava extends TileService {
 
     @Override
     public void onTileAdded() {
@@ -72,6 +73,7 @@ public class QuickSettingsService extends TileService {
             }
         }
     }
-    */
 
+*/
 }
+
