@@ -31,29 +31,27 @@ public class RVAdapter extends RecyclerView.Adapter<RVAdapter.ViewHolder> {
     private boolean isEditModeActive;
 
     public class ViewHolder extends RecyclerView.ViewHolder {
-        public View normalLayout;
-        public View editLayout;
+        private View editLayout;
 
         //Normal Layout views
-        public EditText cLabel, cText;
-        public ImageView cIcon;
-        public ImageButton editButton;
+        private EditText viewLabel, viewText;
+        private ImageView viewIcon;
+        private ImageButton editButton;
 
         //Edit Layout Views
-        public Button dismissBtnEdit, saveBtnEdit, deleteBtnEdit;
+        private Button dismissBtnEdit, saveBtnEdit, deleteBtnEdit;
 
-        public ViewHolder(View itemView) {
+        private ViewHolder(View itemView) {
             super(itemView);
             itemView.isInEditMode();
 
-            normalLayout = itemView.findViewById(R.id.normalMode);
             editLayout = itemView.findViewById(R.id.editMode);
             isEditModeActive = false;
 
             //Normal layout
-            cLabel = (EditText) itemView.findViewById(R.id.pasteLabel);
-            cText = (EditText) itemView.findViewById(R.id.pasteText);
-            cIcon = (ImageView) itemView.findViewById(R.id.pasteIcon);
+            viewLabel = (EditText) itemView.findViewById(R.id.pasteLabel);
+            viewText = (EditText) itemView.findViewById(R.id.pasteText);
+            viewIcon = (ImageView) itemView.findViewById(R.id.pasteIcon);
             editButton = (ImageButton) itemView.findViewById(R.id.editButton);
 
             //Editing Layout
@@ -63,10 +61,9 @@ public class RVAdapter extends RecyclerView.Adapter<RVAdapter.ViewHolder> {
         }
     }
 
-    public RVAdapter(Context mContext, List<Paste> pasteList) {
+    protected RVAdapter(Context mContext, List<Paste> pasteList) {
         this.mContext = mContext;
         this.pasteList = pasteListSingleton.getPasteList();
-        //-this.pasteList = pasteList;
     }
 
     @Override
@@ -76,41 +73,39 @@ public class RVAdapter extends RecyclerView.Adapter<RVAdapter.ViewHolder> {
         return new ViewHolder(itemView);
     }
 
-    public RVAdapter.ViewHolder PubRVA;
 
     @Override
-    public void onBindViewHolder(final RVAdapter.ViewHolder holder, final int position) {
-        PubRVA = holder;
+    public void onBindViewHolder(final RVAdapter.ViewHolder holder, final int position) { //TODO replace position with holder.getAdapterPosition()
+        //TODO Close keyboard in onClicks
 
         holder.setIsRecyclable(false);
-        holder.cLabel.setText(pasteList.get(position).getLabel());
-        holder.cText.setText(pasteList.get(position).getText() + pasteList.get(position).getDbID() + " " + position);
-        Log.d("Database: ", "" + pasteList.get(position).getText() + pasteList.get(position).getDbID() + " " + position);
-        holder.cText.setText(pasteList.get(position).getText());
+        holder.viewLabel.setText(pasteList.get(position).getLabel());
+        holder.viewText.setText(pasteList.get(position).getText() + pasteList.get(position).getDbID() + " " + position);
+        holder.viewText.setText(pasteList.get(position).getText());
 
-        //holder.cIcon.setImageResource(R.drawable.moneybag); //TODO (OLD) Assign DB value to imageview
+        //holder.viewIcon.setImageResource(R.drawable.moneybag); //TODO (OLD) Assign DB value to imageview
 
         //Update icon to match DB
-        holder.cIcon.setImageDrawable(MaterialDrawableBuilder.with(mContext)
+        holder.viewIcon.setImageDrawable(MaterialDrawableBuilder.with(mContext)
                 .setIcon(MaterialDrawableBuilder.IconValue.BORDER_COLOR)
                 .setColor(Color.BLACK)
                 .build()
         );
 
-        holder.cLabel.setEnabled(false);
-        holder.cText.setEnabled(false);
+        holder.viewLabel.setEnabled(false);
+        holder.viewText.setEnabled(false);
 
         //Event Listener for editing the layout
         holder.editButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 changeLayoutToEditing(holder);
-                holder.cLabel.setEnabled(true);
-                holder.cText.setEnabled(true);
+                holder.viewLabel.setEnabled(true);
+                holder.viewText.setEnabled(true);
             }
         });
 
         //Listener for icon
-        holder.cIcon.setOnClickListener(new View.OnClickListener() {
+        holder.viewIcon.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Log.d("RVA","Icon image clicked!");
@@ -119,7 +114,7 @@ public class RVAdapter extends RecyclerView.Adapter<RVAdapter.ViewHolder> {
         });
 
         //Listener for text changes
-        holder.cLabel.addTextChangedListener(new TextWatcher() {
+        holder.viewLabel.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
             }
@@ -130,11 +125,9 @@ public class RVAdapter extends RecyclerView.Adapter<RVAdapter.ViewHolder> {
 
             @Override
             public void afterTextChanged(Editable s) {
-                if(holder.cLabel.getText().length() == 0 || holder.cLabel.getText().length() > 18) {
-                    holder.saveBtnEdit.setEnabled(false);
+                if(holder.viewLabel.getText().length() == 0 || holder.viewLabel.getText().length() > 18) {
                     holder.saveBtnEdit.setTextColor(Color.rgb(200,200,200));
                 } else {
-                    holder.saveBtnEdit.setEnabled(true);
                     holder.saveBtnEdit.setTextColor(ContextCompat.getColor(mContext, R.color.colorAccent));
                 }
             }
@@ -143,34 +136,35 @@ public class RVAdapter extends RecyclerView.Adapter<RVAdapter.ViewHolder> {
         //Listener for save
         holder.saveBtnEdit.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                if(holder.cLabel.getText().length() > 19) {
-                    //TODO Toast or stuff?
-                } else if(holder.cLabel.getText().length() == 0) {
-                    //TODO Toast or stuff?
-                } else {
-                    pasteListSingleton.updatePaste(position, pasteList.get(position).getDbID(), String.valueOf(holder.cLabel.getText()), String.valueOf(holder.cText.getText()), 10);
+            if(holder.viewLabel.getText().length() > 19) {
+                //TODO Toast or stuff?
+                Log.d("RVA","Save Btn clicked when greather than 18");
+            } else if(holder.viewLabel.getText().length() == 0) {
+                //TODO Toast or stuff?
+                Log.d("RVA","Save Btn clicked when 0");
+            } else {
+                pasteListSingleton.updatePaste(position, pasteList.get(position).getDbID(), String.valueOf(holder.viewLabel.getText()), String.valueOf(holder.viewText.getText()), 10);
 
-                    holder.cLabel.setText(holder.cLabel.getText());
-                    holder.cText.setText(holder.cText.getText());
+                holder.viewLabel.setText(holder.viewLabel.getText());
+                holder.viewText.setText(holder.viewText.getText());
 
-                    changeLayoutToEditing(holder);
-                    holder.cLabel.setEnabled(false);
-                    holder.cText.setEnabled(false);
-                    Log.d("save Editing: ", pasteList.get(position).getText() + pasteList.get(position).getLabel());
-                }
+                changeLayoutToEditing(holder);
+                holder.viewLabel.setEnabled(false);
+                holder.viewText.setEnabled(false);
+            }
             }
         });
 
         //Listener for dismiss
         holder.dismissBtnEdit.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                changeLayoutToEditing(holder);
-                holder.cLabel.setText(pasteList.get(position).getLabel());
-                holder.cText.setText(pasteList.get(position).getText());
+            changeLayoutToEditing(holder);
+            holder.viewLabel.setText(pasteList.get(position).getLabel());
+            holder.viewText.setText(pasteList.get(position).getText());
 
 
-                holder.cLabel.setEnabled(false);
-                holder.cText.setEnabled(false);
+            holder.viewLabel.setEnabled(false);
+            holder.viewText.setEnabled(false);
             }
         });
 
@@ -180,7 +174,7 @@ public class RVAdapter extends RecyclerView.Adapter<RVAdapter.ViewHolder> {
             public void onClick(View v) {
                 AlertDialog.Builder dialog = new AlertDialog.Builder(mContext)
                         .setTitle("Are you sure you want to delete this paste?")
-                        .setPositiveButton("Delete", new DialogInterface.OnClickListener() {
+                        .setPositiveButton("Delete Paste", new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
                                 dialog.dismiss();
@@ -198,7 +192,17 @@ public class RVAdapter extends RecyclerView.Adapter<RVAdapter.ViewHolder> {
         });
     }
 
-    public void changeLayoutToEditing(RVAdapter.ViewHolder holder) {
+    @Override
+    public void onAttachedToRecyclerView(RecyclerView recyclerView) {
+        super.onAttachedToRecyclerView(recyclerView);
+    }
+
+    @Override
+    public int getItemCount() {
+        return pasteList.size();
+    }
+
+    private void changeLayoutToEditing(RVAdapter.ViewHolder holder) {
         if(!isEditModeActive) {
             holder.editLayout.setVisibility(View.VISIBLE);
             holder.editButton.setEnabled(false);
@@ -208,16 +212,6 @@ public class RVAdapter extends RecyclerView.Adapter<RVAdapter.ViewHolder> {
             holder.editButton.setEnabled(true);
             isEditModeActive = false;
         }
-    }
-
-    @Override
-    public void onAttachedToRecyclerView(RecyclerView recyclerView) {
-        super.onAttachedToRecyclerView(recyclerView);
-    }
-
-    @Override
-    public int getItemCount() {
-        return pasteList.size();
     }
 
 }

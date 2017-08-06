@@ -51,22 +51,14 @@ public class MainActivity extends AppCompatActivity implements Observer {
         rv.isInEditMode();
 
         //Fab
-        final FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
+        final FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab); //TODO Focus on new card when FAB is pressed
         fab.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                pasteListSingleton.insertPaste("Paste Label","Text",10);
+                pasteListSingleton.insertPaste("Paste Label","Text",10); //TODO Replace strings and icon
                 updateRV(rv, adapter);
                 adapter.notifyItemInserted(pasteListSingleton.getPasteList().size()-1);
             }
         });
-    }
-
-    public void updateRV(RecyclerView rv, RVAdapter adapter) {
-        adapter.notifyItemChanged(pasteListSingleton.getPasteList().size());
-        adapter.notifyItemRangeChanged(0, pasteListSingleton.getPasteList().size());
-
-        adapter.notifyDataSetChanged();
-        updateUIifEmptyList(rv);
     }
 
     private void updateUIifEmptyList(RecyclerView rv) {
@@ -79,6 +71,14 @@ public class MainActivity extends AppCompatActivity implements Observer {
             noData.setVisibility(View.GONE);
             rv.setVisibility(View.VISIBLE);
         }
+    }
+
+    public void updateRV(RecyclerView rv, RVAdapter adapter) { //TODO Collapse into observer update()?
+        adapter.notifyItemChanged(pasteListSingleton.getPasteList().size());
+        adapter.notifyItemRangeChanged(0, pasteListSingleton.getPasteList().size());
+
+        adapter.notifyDataSetChanged();
+        updateUIifEmptyList(rv);
     }
 
     @Override

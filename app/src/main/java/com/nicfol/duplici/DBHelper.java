@@ -12,6 +12,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class DBHelper extends SQLiteOpenHelper {
+    //TODO Sanitize all inputs?
+    //TODO Move logic away from Main thread
+    //TODO Store priority
 
     static final String DATABASE_NAME = "duplici_pastes.db";
     private static final int DATABASE_VERSION = 1;
@@ -43,7 +46,7 @@ public class DBHelper extends SQLiteOpenHelper {
         }
     }
 
-    public boolean insertPasteToDb(String cLabel, String cText, int cIcon) { //TODO Add priority to DB and sort getListOfPAste by Prio
+    protected boolean insertPasteToDb(String cLabel, String cText, int cIcon) { //TODO Add priority to DB and sort getListOfPAste by Prio
         try {
             SQLiteDatabase db = getWritableDatabase();
             ContentValues contentValues = new ContentValues();
@@ -60,7 +63,7 @@ public class DBHelper extends SQLiteOpenHelper {
         }
     }
 
-    public boolean updatePasteInDb(Integer id, String cLabel, String cText, int cIcon) {
+    protected boolean updatePasteInDb(Integer id, String cLabel, String cText, int cIcon) {
         try {
             SQLiteDatabase db = getWritableDatabase();
             ContentValues contentValues = new ContentValues();
@@ -77,7 +80,7 @@ public class DBHelper extends SQLiteOpenHelper {
         }
     }
 
-    public Cursor getPasteFromDb(int id) {
+    protected Cursor getPasteFromDb(int id) {
         SQLiteDatabase db = this.getReadableDatabase();
         Cursor res = db.rawQuery( "SELECT * FROM " + PASTE_TABLE_NAME + " WHERE " + PASTE_COLUMN_ID + "=?",
                 new String[] {Integer.toString(id)});
@@ -85,7 +88,7 @@ public class DBHelper extends SQLiteOpenHelper {
     }
 
 
-    public List<Paste> getListOfPastesFromDb() {
+    protected List<Paste> getListOfPastesFromDb() {
         List<Paste> pasteList = new ArrayList<>();
         SQLiteDatabase db = this.getReadableDatabase();
 
@@ -114,20 +117,20 @@ public class DBHelper extends SQLiteOpenHelper {
         return pasteList;
     }
 
-    public Cursor getAllPastesFromDb() {
+    protected Cursor getAllPastesFromDb() {
         SQLiteDatabase db = this.getReadableDatabase();
         Cursor res = db.rawQuery( "SELECT * FROM " + PASTE_TABLE_NAME, null);
         return res;
     }
 
-    public void deletePasteFromDb(Integer id) {
+    protected void deletePasteFromDb(Integer id) {
         SQLiteDatabase db = this.getWritableDatabase();
         db.delete(PASTE_TABLE_NAME, PASTE_COLUMN_ID + " =? ",
                 new String[]{Long.toString(id)} );
         db.close();
     }
 
-    public int getNoOfRows() {
+    protected int getNoOfRows() {
         SQLiteDatabase db = this.getReadableDatabase();
 
         try {
@@ -140,14 +143,14 @@ public class DBHelper extends SQLiteOpenHelper {
         }
     }
 
-    public int getLastInsertID() {
-        //TODO Catch some edge cases here
+    protected int getLastInsertID() { //TODO Catch some edge cases here
         int insertID = -1;
         Cursor res = getAllPastesFromDb();
         if(res != null && res.moveToLast()) {
             insertID = res.getInt(0);
         }
 
+        //TODO Close cursor
         return insertID;
     }
 }

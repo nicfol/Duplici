@@ -9,6 +9,8 @@ import java.util.Observable;
 
 
 class PasteListSingleton extends Observable {
+    //TODO Add check for initialization
+
     private static final PasteListSingleton thisInstance = new PasteListSingleton();
 
     static PasteListSingleton getInstance() {
@@ -17,19 +19,16 @@ class PasteListSingleton extends Observable {
 
     private PasteListSingleton() { }
 
-
-
     private static Context appContext;
     private static List<Paste> pasteList = new ArrayList<>();
     static DBHelper db;
 
-
     protected void init(Context context) {
         if(context != null){
             appContext = context;
+
             db = new DBHelper(appContext);
             pasteList = db.getListOfPastesFromDb();
-            Log.d("","");
         }
     }
 
@@ -46,7 +45,7 @@ class PasteListSingleton extends Observable {
     }
 
     protected void deletePaste(int dbID) {
-        int listIndex = findPasteByDBid(dbID);
+        int listIndex = findPasteByDBid(dbID); //TODO doesn't fail gracefully if findPasteByDBid returns -1
 
         db = new DBHelper(appContext);
         db.deletePasteFromDb(dbID);
@@ -57,7 +56,7 @@ class PasteListSingleton extends Observable {
     }
 
     protected int findPasteByDBid(int dbID) {
-        for(int i = 0; i <= pasteList.size()-1; i++) {
+        for(int i = 0; i <= pasteList.size()-1; i++) {  //TODO Update to for each?
             if(pasteList.get(i).getDbID() == dbID) {
                 return i;
             }
@@ -79,7 +78,7 @@ class PasteListSingleton extends Observable {
         return pasteList;
     }
 
-    protected int getLastInsertId() {
+    protected int getLastInsertId() { //TODO remove?
         db = new DBHelper(appContext);
         return db.getLastInsertID();
     }
@@ -88,7 +87,7 @@ class PasteListSingleton extends Observable {
         return pasteList.get(i);
     }
 
-    public void notifyChanges() {
+    private void notifyChanges() {
         setChanged();
         notifyObservers(pasteList);
     }

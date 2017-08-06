@@ -17,7 +17,6 @@ class QuickSettingsService : TileService() {
         super.onTileAdded()
         Log.d("QS", "Tile added")
 
-        iterator = 0
 
         var pasteList = PasteListSingleton.getInstance()
         pasteList.getPaste(1).label
@@ -26,9 +25,6 @@ class QuickSettingsService : TileService() {
     override fun onStartListening() {
         super.onStartListening()
         Log.d("QS", "Start listening")
-
-
-
     }
 
     override fun onClick() {

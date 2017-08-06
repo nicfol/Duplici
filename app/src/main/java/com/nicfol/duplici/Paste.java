@@ -1,6 +1,6 @@
 package com.nicfol.duplici;
 
-public class Paste {
+public class Paste { //TODO Implement priority
 
     private String label;
     private String text;
