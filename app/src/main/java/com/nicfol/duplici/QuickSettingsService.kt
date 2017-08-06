@@ -4,8 +4,8 @@ import android.annotation.TargetApi
 import android.content.ClipData
 import android.content.ClipboardManager
 import android.content.Context
-import android.graphics.Shader
 import android.os.Build
+import android.service.quicksettings.Tile
 import android.service.quicksettings.TileService
 import android.util.Log
 
@@ -17,31 +17,38 @@ class QuickSettingsService : TileService() {
 
     override fun onStartListening() {
         super.onStartListening()
-        Log.d("QS", "Start listening")
         pasteListSingleton.init(this)
+        val tile = qsTile
+        if(pasteListSingleton.getPasteList().size == 0) {
+            tile.state = Tile.STATE_UNAVAILABLE
+            tile.updateTile()
+        } else {
+            tile.state = Tile.STATE_ACTIVE
+            tile.updateTile()
+        }
     }
 
     override fun onStopListening() {
         super.onStopListening()
-        Log.d("QS", "Stop Listening")
+
+        val tile = qsTile
+        tile.label = getString(R.string.app_name)
+        //tile.icon = //TODO
     }
 
     override fun onTileAdded() {
         super.onTileAdded()
-        Log.d("QS", "Tile added")
     }
 
     override fun onClick() {
         super.onClick()
-        Log.d("QS", "Tile tapped")
 
-        //Get data from
-        var label = pasteListSingleton.getPaste(iterator).label
-        var text = pasteListSingleton.getPaste(iterator).text
+        var label = pasteListSingleton.getPaste(iterator)?.label
+        var text = pasteListSingleton.getPaste(iterator)?.text
 
         var tile = qsTile
-        tile.label = pasteListSingleton.getPaste(iterator).label
-        tile.contentDescription = pasteListSingleton.getPaste(iterator).text
+        tile.label = pasteListSingleton.getPaste(iterator)?.label
+        tile.contentDescription = pasteListSingleton.getPaste(iterator)?.text
         tile.updateTile()
 
         var clipboard = getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
@@ -53,6 +60,7 @@ class QuickSettingsService : TileService() {
         Log.d("QS", iterator.toString())
         Log.d("QS", noOfPastes.toString())
         Log.d("QS", label + " " + text)
+        Log.d("QS", clipboard.primaryClip?.toString())
 
         if(iterator < noOfPastes) {
             iterator += 1
@@ -63,7 +71,6 @@ class QuickSettingsService : TileService() {
 
     override fun onTileRemoved() {
         super.onTileRemoved()
-        Log.d("QS", "Tile removed")
     }
 
 }

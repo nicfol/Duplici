@@ -11,7 +11,7 @@ import android.database.sqlite.SQLiteOpenHelper;
 import java.util.ArrayList;
 import java.util.List;
 
-public class DBHelper extends SQLiteOpenHelper {
+class DBHelper extends SQLiteOpenHelper {
     //TODO Sanitize all inputs
     //TODO Move logic away from Main thread
     //TODO Store priority

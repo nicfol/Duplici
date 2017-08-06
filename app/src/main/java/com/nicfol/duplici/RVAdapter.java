@@ -22,7 +22,7 @@ import net.steamcrafted.materialiconlib.MaterialDrawableBuilder;
 import java.util.List;
 
 
-public class RVAdapter extends RecyclerView.Adapter<RVAdapter.ViewHolder> {
+class RVAdapter extends RecyclerView.Adapter<RVAdapter.ViewHolder> {
 
     private Context mContext;
     private List<Paste> pasteList;

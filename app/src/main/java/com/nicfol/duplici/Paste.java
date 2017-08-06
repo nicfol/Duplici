@@ -1,13 +1,13 @@
 package com.nicfol.duplici;
 
-public class Paste { //TODO Implement priority
+class Paste { //TODO Implement priority
 
     private String label;
     private String text;
     private int icon;
     private int dbID;
 
-    public Paste(int dbID, String label, String text, int icon) {
+    Paste(int dbID, String label, String text, int icon) {
         this.label = label;
         this.text = text;
         this.icon = icon;

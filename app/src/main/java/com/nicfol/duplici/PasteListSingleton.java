@@ -10,6 +10,7 @@ import java.util.Observable;
 
 public class PasteListSingleton extends Observable {
     //TODO Add check for initialization
+    //TODO Throw errors
 
     private static final PasteListSingleton thisInstance = new PasteListSingleton();
 
@@ -90,7 +91,11 @@ public class PasteListSingleton extends Observable {
     }
 
     public Paste getPaste(int i) {
-        return pasteList.get(i);
+        if(pasteList.size() > 0 || pasteList.size() < i) {
+            return pasteList.get(i);
+        } else {
+            return new Paste(-1, "ERROR", "ERROR", -1); //TODO Fix this
+        }
     }
 
     private void notifyChanges() {
