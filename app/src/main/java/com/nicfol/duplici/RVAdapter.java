@@ -75,15 +75,13 @@ public class RVAdapter extends RecyclerView.Adapter<RVAdapter.ViewHolder> {
 
 
     @Override
-    public void onBindViewHolder(final RVAdapter.ViewHolder holder, final int position) { //TODO replace position with holder.getAdapterPosition()
+    public void onBindViewHolder(final RVAdapter.ViewHolder holder, final int position) {
         //TODO Close keyboard in onClicks
 
         holder.setIsRecyclable(false);
-        holder.viewLabel.setText(pasteList.get(position).getLabel());
-        holder.viewText.setText(pasteList.get(position).getText() + pasteList.get(position).getDbID() + " " + position);
-        holder.viewText.setText(pasteList.get(position).getText());
-
-        //holder.viewIcon.setImageResource(R.drawable.moneybag); //TODO (OLD) Assign DB value to imageview
+        holder.viewLabel.setText(pasteList.get(holder.getAdapterPosition()).getLabel());
+        holder.viewText.setText(pasteList.get(holder.getAdapterPosition()).getText());
+        holder.viewText.setText(pasteList.get(holder.getAdapterPosition()).getText());
 
         //Update icon to match DB
         holder.viewIcon.setImageDrawable(MaterialDrawableBuilder.with(mContext)
@@ -137,13 +135,14 @@ public class RVAdapter extends RecyclerView.Adapter<RVAdapter.ViewHolder> {
         holder.saveBtnEdit.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
             if(holder.viewLabel.getText().length() > 19) {
-                //TODO Toast or stuff?
+                //TODO Toast?
                 Log.d("RVA","Save Btn clicked when greather than 18");
             } else if(holder.viewLabel.getText().length() == 0) {
-                //TODO Toast or stuff?
+                //TODO Toast?
                 Log.d("RVA","Save Btn clicked when 0");
             } else {
-                pasteListSingleton.updatePaste(position, pasteList.get(position).getDbID(), String.valueOf(holder.viewLabel.getText()), String.valueOf(holder.viewText.getText()), 10);
+                pasteListSingleton.updatePaste(holder.getAdapterPosition(), pasteList.get(holder.getAdapterPosition()).getDbID(),
+                        String.valueOf(holder.viewLabel.getText()), String.valueOf(holder.viewText.getText()), 10);
 
                 holder.viewLabel.setText(holder.viewLabel.getText());
                 holder.viewText.setText(holder.viewText.getText());
@@ -159,8 +158,8 @@ public class RVAdapter extends RecyclerView.Adapter<RVAdapter.ViewHolder> {
         holder.dismissBtnEdit.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
             changeLayoutToEditing(holder);
-            holder.viewLabel.setText(pasteList.get(position).getLabel());
-            holder.viewText.setText(pasteList.get(position).getText());
+            holder.viewLabel.setText(pasteList.get(holder.getAdapterPosition()).getLabel());
+            holder.viewText.setText(pasteList.get(holder.getAdapterPosition()).getText());
 
 
             holder.viewLabel.setEnabled(false);
@@ -178,7 +177,7 @@ public class RVAdapter extends RecyclerView.Adapter<RVAdapter.ViewHolder> {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
                                 dialog.dismiss();
-                                pasteListSingleton.deletePaste(pasteList.get(position).getDbID());
+                                pasteListSingleton.deletePaste(pasteList.get(holder.getAdapterPosition()).getDbID());
                             }
                         })
                         .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {

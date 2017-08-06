@@ -35,7 +35,13 @@ class PasteListSingleton extends Observable {
     protected void insertPaste(String cLabel, String cText, int cIcon) {
         //Add new paste to DB
         db = new DBHelper(appContext);
-        db.insertPasteToDb(cLabel, cText, cIcon);
+
+        try {
+            db.insertPasteToDb(cLabel, cText, cIcon);
+        } catch (Exception e) {
+            e.printStackTrace();
+            Log.e("PasteListSingleton","Failed to insert to DB");
+        }
 
         //Add new paste to memory list
         pasteList.add(new Paste(db.getLastInsertID()+1, cLabel, cText, cIcon));
@@ -45,18 +51,23 @@ class PasteListSingleton extends Observable {
     }
 
     protected void deletePaste(int dbID) {
-        int listIndex = findPasteByDBid(dbID); //TODO doesn't fail gracefully if findPasteByDBid returns -1
+        int listIndex = findPasteByDBid(dbID);
 
-        db = new DBHelper(appContext);
-        db.deletePasteFromDb(dbID);
-        db.close();
+        if(listIndex != -1) {
+            db = new DBHelper(appContext);
+            db.deletePasteFromDb(dbID);
+            db.close();
 
-        pasteList.remove(listIndex);
-        notifyChanges();
+            pasteList.remove(listIndex);
+            notifyChanges();
+        } else {
+            Log.e("PasteListSingleton", "deletePaste received -1 from findPasteById");
+            //TODO Throw error
+        }
     }
 
     protected int findPasteByDBid(int dbID) {
-        for(int i = 0; i <= pasteList.size()-1; i++) {  //TODO Update to for each?
+        for(int i = 0; i <= pasteList.size()-1; i++) {
             if(pasteList.get(i).getDbID() == dbID) {
                 return i;
             }
@@ -76,11 +87,6 @@ class PasteListSingleton extends Observable {
 
     protected List getPasteList() {
         return pasteList;
-    }
-
-    protected int getLastInsertId() { //TODO remove?
-        db = new DBHelper(appContext);
-        return db.getLastInsertID();
     }
 
     public Paste getPaste(int i) {

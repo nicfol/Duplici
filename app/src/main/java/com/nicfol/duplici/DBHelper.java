@@ -46,7 +46,7 @@ public class DBHelper extends SQLiteOpenHelper {
         }
     }
 
-    protected boolean insertPasteToDb(String cLabel, String cText, int cIcon) { //TODO Add priority to DB and sort getListOfPAste by Prio
+    protected void insertPasteToDb(String cLabel, String cText, int cIcon) throws Exception { //TODO Add priority to DB and sort getListOfPAste by Prio
         try {
             SQLiteDatabase db = getWritableDatabase();
             ContentValues contentValues = new ContentValues();
@@ -56,10 +56,9 @@ public class DBHelper extends SQLiteOpenHelper {
             contentValues.put(PASTE_COLUMN_ICON, cIcon);
 
             db.insert(PASTE_TABLE_NAME, null, contentValues);
-            return true;
         } catch (Exception e) {
             e.printStackTrace();
-            return false;
+            throw new Exception("Failed to insert to database", e);
         }
     }
 
@@ -93,7 +92,7 @@ public class DBHelper extends SQLiteOpenHelper {
         SQLiteDatabase db = this.getReadableDatabase();
 
         int rows = getNoOfRows();
-        int lastRowNo = getLastInsertID() - rows;
+        int lastRowNo = getLastInsertID() - rows; //TODO Catch if getLastInsertID returns -1
         for(int i = 1; i < rows + lastRowNo + 1; i++) {
             try {
                 Cursor res = getPasteFromDb(i);
@@ -136,7 +135,7 @@ public class DBHelper extends SQLiteOpenHelper {
         try {
             return (int) DatabaseUtils.queryNumEntries(db, PASTE_TABLE_NAME);
         } catch (Exception e) {
-            e.printStackTrace();
+                e.printStackTrace();
             return -1;
         } finally {
             db.close();
@@ -150,7 +149,7 @@ public class DBHelper extends SQLiteOpenHelper {
             insertID = res.getInt(0);
         }
 
-        //TODO Close cursor
+        res.close();
         return insertID;
     }
 }
