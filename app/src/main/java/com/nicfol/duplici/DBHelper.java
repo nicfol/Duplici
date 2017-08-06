@@ -12,9 +12,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class DBHelper extends SQLiteOpenHelper {
-    //TODO Sanitize all inputs?
+    //TODO Sanitize all inputs
     //TODO Move logic away from Main thread
     //TODO Store priority
+    //TODO Start throwing a lot of exceptions
 
     static final String DATABASE_NAME = "duplici_pastes.db";
     private static final int DATABASE_VERSION = 1;

@@ -8,7 +8,7 @@ import java.util.List;
 import java.util.Observable;
 
 
-class PasteListSingleton extends Observable {
+public class PasteListSingleton extends Observable {
     //TODO Add check for initialization
 
     private static final PasteListSingleton thisInstance = new PasteListSingleton();
@@ -24,7 +24,7 @@ class PasteListSingleton extends Observable {
     static DBHelper db;
 
     protected void init(Context context) {
-        if(context != null){
+        if(context != null && appContext == null){
             appContext = context;
 
             db = new DBHelper(appContext);
@@ -85,7 +85,7 @@ class PasteListSingleton extends Observable {
         notifyChanges();
     }
 
-    protected List getPasteList() {
+    public List getPasteList() {
         return pasteList;
     }
 
