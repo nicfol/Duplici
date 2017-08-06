@@ -34,6 +34,8 @@ class QuickSettingsService : TileService() {
         val tile = qsTile
         tile.label = getString(R.string.app_name)
         //tile.icon = //TODO
+        
+        iterator = 0
     }
 
     override fun onTileAdded() {
