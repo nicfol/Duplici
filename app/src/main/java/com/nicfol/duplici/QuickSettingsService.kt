@@ -12,7 +12,7 @@ import android.util.Log
 @TargetApi(Build.VERSION_CODES.N)
 class QuickSettingsService : TileService() {
 
-    var pasteListSingleton = PasteListSingleton.getInstance()
+    var pasteListSingleton = PasteListSingleton.getInstance()!!
     var iterator = 0
 
     override fun onStartListening() {
