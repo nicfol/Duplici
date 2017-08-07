@@ -19,7 +19,7 @@ class QuickSettingsService : TileService() {
         super.onStartListening()
         pasteListSingleton.init(this)
         val tile = qsTile
-        if(pasteListSingleton.getPasteList().size == 0) {
+        if(pasteListSingleton.pasteList.size == 0) {
             tile.state = Tile.STATE_UNAVAILABLE
             tile.updateTile()
         } else {
@@ -48,11 +48,13 @@ class QuickSettingsService : TileService() {
         var label = pasteListSingleton.getPaste(iterator)?.label
         var text = pasteListSingleton.getPaste(iterator)?.text
 
+        //Update the tile to match the DB
         var tile = qsTile
         tile.label = pasteListSingleton.getPaste(iterator)?.label
         tile.contentDescription = pasteListSingleton.getPaste(iterator)?.text
         tile.updateTile()
 
+        //Save to clipboard
         var clipboard = getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
         var clip = ClipData.newPlainText(label, text) as ClipData
         clipboard.primaryClip = clip
@@ -64,6 +66,7 @@ class QuickSettingsService : TileService() {
         Log.d("QS", label + " " + text)
         Log.d("QS", clipboard.primaryClip?.toString())
 
+        //Wrap back around if there's no more pastes
         if(iterator < noOfPastes) {
             iterator += 1
         } else {

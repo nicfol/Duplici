@@ -22,14 +22,18 @@ public class PasteListSingleton extends Observable {
 
     private static Context appContext;
     private static List<Paste> pasteList = new ArrayList<>();
-    static DBHelper db;
+    private static DBHelper db;
+
 
     protected void init(Context context) {
+        //Initialize to get context for the DBHelper and load data from DB to memory
         if(context != null && appContext == null){
             appContext = context;
 
             db = new DBHelper(appContext);
             pasteList = db.getListOfPastesFromDb();
+        } else {
+            //TODO fail gracefully
         }
     }
 
@@ -39,7 +43,7 @@ public class PasteListSingleton extends Observable {
 
         try {
             db.insertPasteToDb(cLabel, cText, cIcon);
-        } catch (Exception e) {
+        } catch (Exception e) { //TODO fail gracefully
             e.printStackTrace();
             Log.e("PasteListSingleton","Failed to insert to DB");
         }
@@ -55,15 +59,18 @@ public class PasteListSingleton extends Observable {
         int listIndex = findPasteByDBid(dbID);
 
         if(listIndex != -1) {
+            //Delete the paste from the DB
             db = new DBHelper(appContext);
             db.deletePasteFromDb(dbID);
             db.close();
 
+            //Delete from memory
             pasteList.remove(listIndex);
             notifyChanges();
         } else {
             Log.e("PasteListSingleton", "deletePaste received -1 from findPasteById");
             //TODO Throw error
+            //TODO fail gracefully
         }
     }
 
@@ -73,14 +80,16 @@ public class PasteListSingleton extends Observable {
                 return i;
             }
         }
-        return -1;
+        return -1; //TODO fail gracefully
     }
 
     protected void updatePaste(int position, int dbID, String cLabel, String cText, int cIcon) {
+        //Update DB
         db = new DBHelper(appContext);
         db.updatePasteInDb(dbID, cLabel, cText, cIcon);
         db.close();
 
+        //Update memory
         pasteList.set(position, new Paste(dbID, cLabel, cText, cIcon));
 
         notifyChanges();

@@ -136,14 +136,14 @@ class DBHelper extends SQLiteOpenHelper {
         try {
             return (int) DatabaseUtils.queryNumEntries(db, PASTE_TABLE_NAME);
         } catch (Exception e) {
-                e.printStackTrace();
+            e.printStackTrace(); //TODO fail gracefully
             return -1;
         } finally {
             db.close();
         }
     }
 
-    protected int getLastInsertID() { //TODO Catch some edge cases here
+    protected int getLastInsertID() { //TODO fail gracefully
         int insertID = -1;
         Cursor res = getAllPastesFromDb();
         if(res != null && res.moveToLast()) {

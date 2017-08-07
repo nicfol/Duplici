@@ -33,13 +33,13 @@ public class MainActivity extends AppCompatActivity implements Observer {
                         .enableWebKitInspector(Stetho.defaultInspectorModulesProvider(this))
                         .build());
 
+        //Initialize singleton and give it an observer
         pasteListSingleton.init(this);
-
         pasteListSingleton.addObserver(this);
 
+        //Recycleview and adapter
         rv = (RecyclerView)findViewById(R.id.rv);
         adapter = new RVAdapter(this, pasteListSingleton.getPasteList());
-
         LinearLayoutManager llm = new LinearLayoutManager(this);
 
         //Hide RV if there's nothing to show
@@ -50,7 +50,7 @@ public class MainActivity extends AppCompatActivity implements Observer {
         rv.setAdapter(adapter);
         rv.isInEditMode();
 
-        //Fab
+        //Fab Listener
         final FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab); //TODO Focus on new card when FAB is pressed
         fab.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
@@ -61,6 +61,7 @@ public class MainActivity extends AppCompatActivity implements Observer {
         });
     }
 
+    //Disables the cardview and shows noData if there's no pastes
     private void updateUIifEmptyList(RecyclerView rv) {
         if(pasteListSingleton.getPasteList().isEmpty()) {
             TextView noData = (TextView)findViewById(R.id.noData);
@@ -73,6 +74,7 @@ public class MainActivity extends AppCompatActivity implements Observer {
         }
     }
 
+    //Updates the RV
     public void updateRV(RecyclerView rv, RVAdapter adapter) { //TODO Collapse into observer update()?
         adapter.notifyItemChanged(pasteListSingleton.getPasteList().size());
         adapter.notifyItemRangeChanged(0, pasteListSingleton.getPasteList().size());
@@ -81,6 +83,7 @@ public class MainActivity extends AppCompatActivity implements Observer {
         updateUIifEmptyList(rv);
     }
 
+    //Observer for pastListSingleton changes
     @Override
     public void update(Observable o, Object arg) {
         ((PasteListSingleton) o ).getPasteList();
